@@ -100,6 +100,58 @@
     if (reduceMotion) { for (var k = 0; k < 60; k++) frame(k * 60); } else requestAnimationFrame(frame);
   })();
 
+  /* Editor gutter line numbers, with the current line tracking the typed text */
+  (function gutter() {
+    var g = $('#gutter');
+    if (!g) return;
+    var html = '';
+    for (var i = 1; i <= 60; i++) html += '<li' + (i === 9 ? ' class="cur"' : '') + '></li>';
+    g.innerHTML = html;
+  })();
+
+  /* Background code: real snippets from the work, drifting up the page */
+  (function bgcode() {
+    var far = $('#bgFar'), near = $('#bgNear');
+    if (!far || !near) return;
+    var src = [
+      'export function split(amount, owners) {',
+      '  const rows = owners.map((o) => {',
+      '    const exact = (amount * o.bps) / 10_000;',
+      '    return { id: o.id, exact, share: Math.floor(exact) };',
+      '  });',
+      '  let rem = amount - sum(rows.map((r) => r.share));',
+      '  rows.sort(byFraction).forEach((r) => { if (rem-- > 0) r.share++; });',
+      '  return rows;',
+      '}',
+      '',
+      'function sendChat(S, friendId, text) {',
+      '  if (f.lastChatDay !== S.day) {',
+      '    f.streak = f.lastChatDay === S.day - 1 ? f.streak + 1 : 1;',
+      '    addTrust(S, f.id, TRUST.dailyChat);',
+      '  }',
+      '}',
+      '',
+      'const snapshot = await addDoc(collection(db, "answers"), {',
+      '  userId, skillId, answer, createdAt: serverTimestamp(),',
+      '});',
+      '',
+      'return (',
+      '  <SelectedWorks>',
+      '    {works.map((w) => <Work key={w.slug} {...w} />)}',
+      '  </SelectedWorks>',
+      ');',
+      '',
+      'const progress = clamp01((serverNow() - ride.startedAt) / ride.durationMs);',
+      'socket.on("ride:event", (e) => applyRideEvent(ride, e));',
+      '',
+      'useEffect(() => { const id = requestAnimationFrame(tick); return () => cancelAnimationFrame(id); }, []);',
+      '',
+    ].join('\n');
+    var block = (src + '\n').repeat(4);
+    far.textContent = block + block;
+    near.textContent = block.split('\n').filter(function (_, i) { return i % 3 === 0; }).join('\n\n').repeat(2);
+  })();
+
   /* Typed role line */
   (function typed() {
     var el = $('#typed');

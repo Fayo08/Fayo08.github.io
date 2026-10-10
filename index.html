@@ -27,19 +27,37 @@
   <main>
     <!-- Hero: falling code with the name set like a terminal banner -->
     <section class="hero" aria-labelledby="name">
-      <canvas id="rain" aria-hidden="true"></canvas>
-      <div class="hero-inner">
-        <span class="tag">(IF FAYO)</span>
-        <h1 id="name"><span>OYENDE</span><span>FAVOUR</span></h1>
-        <p class="typed"><span class="prompt">&gt;</span> <span id="typed">frontend developer &amp; ux designer</span><span class="cursor" aria-hidden="true">_</span></p>
-        <p class="comment">// born in Nigeria, building in Calgary. I make things people come back to.</p>
-        <div class="hero-actions">
-          <a class="btn" href="#works">$ ls works</a>
-          <a class="btn ghost" href="#contact">$ contact</a>
+      <div class="ide">
+        <div class="ide-bar">
+          <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="ide-tab on">(IF FAYO)</span>
+          <span class="ide-tab" aria-hidden="true">index.jsx</span>
+          <span class="ide-title" aria-hidden="true">oyende-favour</span>
+        </div>
+        <div class="ide-body">
+          <ol class="gutter" id="gutter" aria-hidden="true"></ol>
+          <div class="ide-view">
+            <canvas id="rain" aria-hidden="true"></canvas>
+            <div class="hero-inner">
+              <h1 id="name"><span>OYENDE</span><span>FAVOUR</span></h1>
+              <p class="typed"><span class="prompt">&gt;</span> <span id="typed">frontend developer &amp; ux designer</span><span class="cursor" aria-hidden="true">_</span></p>
+              <p class="comment">// born in Nigeria, building in Calgary. I make things people come back to.</p>
+              <div class="hero-actions">
+                <a class="btn" href="#works">$ ls works</a>
+                <a class="btn ghost" href="#contact">$ contact</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ide-status" aria-hidden="true">
+          <span class="br">⎇ main</span><span>⊘ 0 errors</span><span class="sp"></span><span>Ln 1, Col 1</span><span>UTF-8</span><span>JavaScript React</span>
         </div>
       </div>
       <a class="down" href="#selected" aria-label="Scroll to selected works">scroll ↓</a>
     </section>
+
+    <!-- Code drifting in the background behind the rest of the page -->
+    <div class="bgcode" aria-hidden="true"><pre class="far" id="bgFar"></pre><pre class="near" id="bgNear"></pre></div>
 
     <!-- Selected works as a component tree in an editor -->
     <section class="selected" id="selected" aria-labelledby="sel-title">
@@ -58,7 +76,20 @@
       </div>
       <div class="works-grid">
         <div class="stage" id="stage">
-          <div class="cube" id="cube"></div>
+          <svg class="wires" viewBox="0 0 600 600" preserveAspectRatio="none" aria-hidden="true">
+            <g class="base">
+              <line x1="10" y1="190" x2="590" y2="120"/><line x1="40" y1="310" x2="575" y2="245"/>
+              <line x1="95" y1="545" x2="525" y2="35"/><line x1="390" y1="40" x2="595" y2="565"/>
+              <line x1="20" y1="430" x2="350" y2="335"/><line x1="230" y1="585" x2="595" y2="470"/>
+              <line x1="586" y1="70" x2="570" y2="590"/><line x1="85" y1="205" x2="105" y2="480"/>
+              <line x1="150" y1="60" x2="300" y2="140"/>
+            </g>
+            <g class="flow">
+              <line x1="10" y1="190" x2="590" y2="120"/><line x1="95" y1="545" x2="525" y2="35"/>
+              <line x1="230" y1="585" x2="595" y2="470"/><line x1="586" y1="70" x2="570" y2="590"/>
+            </g>
+          </svg>
+          <div class="float"><div class="cube" id="cube"></div></div>
           <div class="floor" aria-hidden="true"></div>
         </div>
         <div class="term" id="term" aria-label="Command line">
