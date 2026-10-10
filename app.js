@@ -228,7 +228,7 @@
   })();
 
   /* ------------------------------------------------------------------
-   * Favour's code snippets: shown in their own section and drifting behind the page
+   * Favour's code snippet: shown in its own section and drifting behind the page
    * ------------------------------------------------------------------ */
   var SNIPPETS = [
     {
@@ -272,51 +272,6 @@
   return (
     <div className="form-group">`,
     },
-    {
-      file: 'Question.jsx', from: 57, note: 'TalentTrace · upload an image to Firebase from a question card',
-      code: String.raw`  //handler for image change
-  const handleImageChange = (e) => {
-    setImageUrl(e.target.value);
-    onImageChange(questionData.questionId, e.target.value);
-  };
-
-  const handleUploadImage = async () => {
-    if (!imageUrl?.trim()) {
-      alert('Please provide an image URL');
-      return;
-    }
-
-    try {
-      await updateImageUrls(
-        questionData.questionId,
-        questionData.skillId,
-        imageUrl
-      );
-      console.log('Image uploaded successfully!');
-      setUploadedImageUrl(imageUrl);
-    } catch (error) {
-      console.error('Error uploading image:', error);
-    }
-  };
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
-
-  return (
-    <Card className="flex flex-col p-[33px] px-[64px] mb-16 gap-[10px] border border-[#003660] bg-white shadow-md">
-      <CardHeader>
-        <CardDescription
-          className="text-[#003660] font-montserrat text-[16px] font-normal leading-[24px] pb-4"
-          style={{
-            color: 'var(--Blue-Blue12, #003660)',
-            fontFeatureSettings: "'liga' off, 'clig' off",
-          }}
-        >
-          {' '}
-          Question {questionNumber} - {questionData.skillName} (
-          {questionData.categoryName})
-        </CardDescription>`,
-    },
   ];
 
   // A small JSX highlighter: comments, strings, regex, tags, keywords, functions, numbers
@@ -338,22 +293,13 @@
     }
     return out + esc(line.slice(last));
   }
-  (function snippets() {
-    var tabs = $('#snipTabs'), body = $('#snipBody'), status = $('#snipStatus');
-    function show(i) {
-      var s = SNIPPETS[i];
-      tabs.querySelectorAll('button').forEach(function (b, k) { b.classList.toggle('on', k === i); b.setAttribute('aria-selected', k === i); });
+  (function snippet() {
+    var body = $('#snipBody'), status = $('#snipStatus');
+    var s = SNIPPETS[0];
+    $('#snipFile').textContent = s.file;
       body.innerHTML = '<ol class="code-lines" start="' + s.from + '">' + s.code.split('\n').map(function (l) { return '<li>' + (highlight(l) || ' ') + '</li>'; }).join('') + '</ol>';
       body.style.setProperty('--start', s.from - 1);
       status.innerHTML = '<span>' + esc(s.note) + '</span><span>' + s.code.split('\n').length + ' lines · JavaScript React</span>';
-    }
-    SNIPPETS.forEach(function (s, i) {
-      var b = document.createElement('button');
-      b.type = 'button'; b.className = 'tab'; b.setAttribute('role', 'tab'); b.textContent = s.file;
-      b.addEventListener('click', function () { show(i); });
-      tabs.appendChild(b);
-    });
-    show(0);
   })();
 
   /* Background code: Favour's snippets drifting up the page */
@@ -398,7 +344,7 @@
    * shot), left = stack, top/bottom = the command.
    * ------------------------------------------------------------------ */
   function faceSet(w, i) {
-    var bar = '<span class="bar"><i></i><i></i><i></i><em>' + w.slug + '</em></span>';
+    var bar = '';
     var back = w.img2
       ? '<span class="f f-back">' + bar + '<img src="' + w.img2 + '" alt="" loading="lazy" draggable="false"></span>'
       : '<span class="f f-back f-about"><span class="k">// about</span>' + esc(w.about.split('. ')[0].slice(0, 120)) + (w.about.length > 120 ? '…' : '.') + '</span>';
@@ -406,8 +352,8 @@
       '<span class="f f-right f-name"><span class="k">// ' + String(i + 1).padStart(2, '0') + '</span><b>' + esc(w.name) + '</b><span>' + esc(w.kind) + (w.year ? ' · ' + w.year : '') + '</span></span>' +
       back +
       '<span class="f f-left f-tags"><span class="k">// stack</span>' + w.tags.map(function (t) { return '<span class="chip">' + esc(t) + '</span>'; }).join('') + '</span>' +
-      '<span class="f f-top f-cmd">$ open<br><b>' + w.slug + '</b></span>' +
-      '<span class="f f-bottom f-cmd">$ open<br><b>' + w.slug + '</b></span>';
+      '<span class="f f-top f-cmd"><b>' + esc(w.name) + '</b></span>' +
+      '<span class="f f-bottom f-cmd"><b>' + esc(w.name) + '</b></span>';
   }
   var WIRES = '<svg class="wires" viewBox="0 0 600 600" preserveAspectRatio="none" aria-hidden="true"><g class="base">' +
     '<line x1="10" y1="190" x2="590" y2="120"/><line x1="95" y1="545" x2="525" y2="35"/><line x1="390" y1="40" x2="595" y2="565"/>' +
@@ -424,9 +370,7 @@
         '<span class="cube3"><span class="c3">' + faceSet(w, i) + '</span></span>' +
         '<span class="shadow" aria-hidden="true"></span><span class="cap"><span class="n">' + n + '</span> / ' + total + '</span></div>' +
       '<div class="wk-term">' +
-        '<div class="term-bar"><i></i><i></i><i></i><span>favour@portfolio: ~/works/' + w.slug + '</span></div>' +
         '<div class="wk-body">' +
-          '<p class="wk-cmd"><span class="g">$</span> open ' + w.slug + '</p>' +
           '<h3 id="wt-' + w.slug + '">' + esc(w.name) + '</h3>' +
           '<p class="wk-kind">' + esc(w.kind) + (w.year ? ' · ' + w.year : '') + '</p>' +
           '<img class="wk-shot" src="' + w.img + '" alt="Screenshot of ' + esc(w.name) + '" loading="lazy">' +

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Oyende Favour · Developer</title>
-  <meta name="description" content="Favour Oyende is a full-stack developer in Calgary building efficient, user-centric apps in React, TypeScript and Python. Browse her work from a 3D cube and a working command line.">
+  <meta name="description" content="Favour Oyende is a full-stack developer in Calgary building efficient, user-centric apps in React, TypeScript and Python. Designer and developer: see the work, the code and a playable game feature.">
   <meta property="og:title" content="Oyende Favour · Developer">
   <meta property="og:description" content="Full-stack developer. Type `ls` to see the work.">
   <meta property="og:type" content="website">
@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@200;300;400;500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
-  <link rel="stylesheet" href="styles.css?v=202610101050">
+  <link rel="stylesheet" href="styles.css?v=202610101107">
 </head>
 <body>
   <header class="top">
@@ -69,13 +69,12 @@
     <!-- Selected works as a component tree in an editor -->
     <section class="selected" id="selected" aria-labelledby="sel-title">
       <div class="editor">
-        <div class="tabs" aria-hidden="true"><span class="tab on">SelectedWorks.jsx</span><span class="tab">About.jsx</span></div>
         <h2 id="sel-title" class="sr">Selected works</h2>
         <ol class="code" id="tree"></ol>
       </div>
     </section>
 
-    <!-- Works: a 3D cube that holds the work, driven by a real command line -->
+    <!-- Works: one section per project, each with its own 3D cube -->
     <section class="works" id="works" aria-labelledby="works-title">
       <div class="sect-head">
         <h2 id="works-title"><span class="g">&lt;</span>Works<span class="g"> /&gt;</span></h2>
@@ -88,22 +87,19 @@
     <section class="about" id="about" aria-labelledby="about-title">
       <div class="sect-head"><h2 id="about-title"><span class="g">&lt;</span>About<span class="g"> /&gt;</span></h2></div>
       <div class="about-grid">
-        <figure class="editor portrait">
-          <div class="tabs" aria-hidden="true"><span class="tab on">favour.webp</span></div>
+        <figure class="portrait">
           <img src="media/favour.webp" alt="Portrait of Favour Oyende" width="600" height="550" loading="lazy">
-          <figcaption>600 × 550 · <span class="g">hi, I'm Favour</span></figcaption>
         </figure>
         <div class="about-copy">
           <p>Hi, my name is Favour. I'm an impact-oriented developer skilled in JavaScript, TypeScript, React, Python and modern web technologies, dedicated to building efficient, user-centric applications.</p>
           <p>With a strong foundation in both frontend development and backend model refinement, I thrive on solving complex problems and delivering impactful digital solutions.</p>
         </div>
         <div class="editor small about-obj">
-          <div class="tabs" aria-hidden="true"><span class="tab on">favour.ts</span></div>
           <pre class="obj" aria-label="Favour's experience, written as a code object"><span class="k">const</span> <span class="v">favour</span> = {
   <span class="p">experience</span>: [
-    { <span class="p">role</span>: <span class="s">"Full-stack Developer"</span>, <span class="p">at</span>: <span class="s">"MyAreaa"</span>,  <span class="p">since</span>: <span class="s">"Jan 2026"</span> },
-    { <span class="p">role</span>: <span class="s">"Software Developer"</span>,   <span class="p">at</span>: <span class="s">"MakeItMVP"</span>, <span class="p">since</span>: <span class="s">"Mar 2025"</span> },
-    { <span class="p">role</span>: <span class="s">"Web Developer"</span>,        <span class="p">at</span>: <span class="s">"BBVA"</span>,      <span class="p">since</span>: <span class="s">"Apr 2024"</span> },
+    { <span class="p">role</span>: <span class="s">"Full-stack Developer"</span>, <span class="p">at</span>: <span class="s">"MyAreaa"</span>,  <span class="p">when</span>: <span class="s">"2026 – now"</span> },
+    { <span class="p">role</span>: <span class="s">"Software Developer"</span>,   <span class="p">at</span>: <span class="s">"MakeItMVP"</span>, <span class="p">when</span>: <span class="s">"2025"</span> },
+    { <span class="p">role</span>: <span class="s">"Web Developer"</span>,        <span class="p">at</span>: <span class="s">"BBVA"</span>,      <span class="p">when</span>: <span class="s">"2024"</span> },
   ],
   <span class="p">based</span>: <span class="s">"Calgary, AB"</span>,
   <span class="p">speaks</span>: [<span class="s">"English"</span>, <span class="s">"Yorùbá"</span>, <span class="s">"Français (un peu)"</span>],
@@ -127,33 +123,29 @@
       </div>
     </section>
 
-    <!-- Code snippets, in an editor with a tab per file -->
+    <!-- One code snippet, in an editor -->
     <section class="snippets" id="snippets" aria-labelledby="snip-title">
       <div class="sect-head">
-        <h2 id="snip-title"><span class="g">&lt;</span>CodeSnippets<span class="g"> /&gt;</span></h2>
-        <p class="comment">// real code from my projects</p>
+        <h2 id="snip-title"><span class="g">&lt;</span>CodeSnippet<span class="g"> /&gt;</span></h2>
+        <p class="comment">// real code from InStock</p>
       </div>
       <div class="editor snip">
-        <div class="tabs" role="tablist" aria-label="Code files" id="snipTabs"></div>
-        <div class="snip-body" id="snipBody" role="tabpanel"></div>
+        <div class="tabs" aria-hidden="true"><span class="tab on" id="snipFile"></span></div>
+        <div class="snip-body" id="snipBody"></div>
         <div class="snip-status" id="snipStatus"></div>
       </div>
     </section>
 
     <!-- Contact as a command -->
     <section class="contact" id="contact" aria-labelledby="contact-title">
-      <div class="editor term-static">
-        <div class="term-bar"><i></i><i></i><i></i><span>favour@portfolio: ~</span></div>
+      <div class="contact-card">
         <div class="contact-body">
-          <p class="line"><span class="g">$</span> contact --favour</p>
           <h2 id="contact-title">Tell me what you need. I’ve probably started on it.</h2>
           <ul class="contact-list">
             <li><span class="key">email</span><a href="mailto:oyendefavour12@gmail.com">oyendefavour12@gmail.com</a></li>
-            <li><span class="key">phone</span><a href="tel:+18259655401">825-965-5401</a></li>
             <li><span class="key">behance</span><a href="https://www.behance.net/oyendefavour" target="_blank" rel="noopener">behance.net/oyendefavour</a></li>
             <li><span class="key">github</span><a href="https://github.com/Fayo08" target="_blank" rel="noopener">github.com/Fayo08</a></li>
           </ul>
-          <p class="line"><span class="g">$</span> <span class="cursor">_</span></p>
         </div>
       </div>
     </section>
@@ -161,15 +153,15 @@
 
   <footer><span>© 2026 Oyende Favour</span><span>built with HTML, CSS and a little JavaScript · no frameworks</span></footer>
 
-  <!-- Lagos Life demo, opened with `run lagos-life` -->
+  <!-- Lagos Life demo, opened from its Works section -->
   <div class="modal" id="demo" hidden>
     <div class="modal-box" role="dialog" aria-modal="true" aria-label="Lagos Life Besties, playable demo">
-      <div class="term-bar"><i></i><i></i><i></i><span>run lagos-life --demo</span><button type="button" class="close" id="demoClose" aria-label="Close demo">✕</button></div>
+      <div class="modal-head"><span>Lagos Life Besties · playable demo</span><button type="button" class="close" id="demoClose" aria-label="Close demo">✕</button></div>
       <iframe id="demoFrame" title="Lagos Life Besties, playable demo" data-src="https://fayo08.github.io/LagosLifeBestieDemo/?embed"></iframe>
-      <p class="hint">Open @tolu in Messages and start a company. <a href="https://fayo08.github.io/LagosLifeBestieDemo/" target="_blank" rel="noopener">Full screen ↗</a></p>
+      <p class="hint"><a href="https://fayo08.github.io/LagosLifeBestieDemo/" target="_blank" rel="noopener">Full screen ↗</a></p>
     </div>
   </div>
 
-  <script src="app.js?v=202610101050"></script>
+  <script src="app.js?v=202610101107"></script>
 </body>
 </html>
