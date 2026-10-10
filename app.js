@@ -30,7 +30,7 @@
       img: 'media/talenttrace.webp', tags: ['React', 'Vite', 'Tailwind', 'Firebase'],
       about: 'The problem: how do you help job-seekers showcase their skills and achievements quickly and effectively? I built Snapshot, a dynamic, exportable profile that puts their key strengths front and centre so candidates stand out in a competitive job market.',
       did: ['Built the Snapshot feature with the team at MakeItMVP', 'Landing hero, and saving users’ answers to Firebase'],
-      links: [['code', 'https://github.com/Fayo08/TalentTrace']],
+      links: [['live', 'https://talenttrace.web.app/SnapshotInfo/TCILTzXV550lfBlrOuYN'], ['code', 'https://github.com/Fayo08/TalentTrace']],
     },
     {
       slug: 'instock', name: 'InStock', year: '2024', kind: 'Inventory management web app',
