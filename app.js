@@ -382,22 +382,21 @@
     rows.push(ind(2) + '<span class="t"><span class="tg">&lt;/SelectedWorks&gt;</span></span>');
     rows.push(ind(1) + '<span class="t">);</span>');
     rows.push(ind(0) + '<span class="t">}</span>');
-    rows.push(ind(0) + '<span class="t cm">// click a work to open it in the cube ↓</span>');
+    rows.push(ind(0) + '<span class="t cm">// click a work to jump to it ↓</span>');
     ol.innerHTML = rows.map(function (r) { return '<li>' + r + '</li>'; }).join('');
     ol.addEventListener('click', function (e) {
       var b = e.target.closest('button.work');
       if (!b) return;
-      document.getElementById('works').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
-      run('open ' + b.dataset.slug);
+      goToWork(b.dataset.slug);
     });
   })();
 
   /* ------------------------------------------------------------------
-   * A cube per work. Each spins on its own; tap one to open it in the CLI.
-   * Faces: front = screenshot, right = name, back = about (or a 2nd shot),
-   * left = stack, top/bottom = the command that opens it.
+   * Works: one section per project. Its cube spins beside a terminal
+   * window that is already open on that project.
+   * Cube faces: front = screenshot, right = name, back = about (or a 2nd
+   * shot), left = stack, top/bottom = the command.
    * ------------------------------------------------------------------ */
-  var grid = $('#cubes');
   function faceSet(w, i) {
     var bar = '<span class="bar"><i></i><i></i><i></i><em>' + w.slug + '</em></span>';
     var back = w.img2
@@ -410,42 +409,66 @@
       '<span class="f f-top f-cmd">$ open<br><b>' + w.slug + '</b></span>' +
       '<span class="f f-bottom f-cmd">$ open<br><b>' + w.slug + '</b></span>';
   }
-  grid.innerHTML = WORKS.map(function (w, i) {
-    return '<button class="cell" type="button" data-slug="' + w.slug + '" aria-label="Open ' + esc(w.name) + '">' +
-      '<span class="cube3"><span class="c3">' + faceSet(w, i) + '</span></span><span class="shadow" aria-hidden="true"></span>' +
-      '<span class="cap"><span class="n">' + String(i + 1).padStart(2, '0') + '</span> ' + esc(w.name) + '</span></button>';
-  }).join('');
+  var WIRES = '<svg class="wires" viewBox="0 0 600 600" preserveAspectRatio="none" aria-hidden="true"><g class="base">' +
+    '<line x1="10" y1="190" x2="590" y2="120"/><line x1="95" y1="545" x2="525" y2="35"/><line x1="390" y1="40" x2="595" y2="565"/>' +
+    '<line x1="20" y1="430" x2="350" y2="335"/><line x1="586" y1="70" x2="570" y2="590"/><line x1="85" y1="205" x2="105" y2="480"/></g>' +
+    '<g class="flow"><line x1="10" y1="190" x2="590" y2="120"/><line x1="586" y1="70" x2="570" y2="590"/></g></svg>';
 
-  var cubes = Array.prototype.map.call(grid.querySelectorAll('.cell'), function (el, i) {
-    return { el: el, c3: el.querySelector('.c3'), slug: el.dataset.slug, ry: 20 + i * 47, rx: -16, v: 0.011 + (i % 3) * 0.003, hover: false, active: false, phase: i * 1.3 };
+  var list = $('#workList');
+  list.innerHTML = WORKS.map(function (w, i) {
+    var n = String(i + 1).padStart(2, '0'), total = String(WORKS.length).padStart(2, '0');
+    var links = (w.demo ? '<button class="wbtn primary" type="button" data-demo>▶ Play the demo</button>' : '') +
+      w.links.map(function (l) { return '<a class="wbtn" href="' + l[1] + '" target="_blank" rel="noopener">' + esc(l[0]) + ' ↗</a>'; }).join('');
+    return '<article class="wk' + (i % 2 ? ' flip' : '') + '" id="work-' + w.slug + '" aria-labelledby="wt-' + w.slug + '">' +
+      '<div class="wk-cube" data-slug="' + w.slug + '">' + WIRES +
+        '<span class="cube3"><span class="c3">' + faceSet(w, i) + '</span></span>' +
+        '<span class="shadow" aria-hidden="true"></span><span class="cap"><span class="n">' + n + '</span> / ' + total + '</span></div>' +
+      '<div class="wk-term">' +
+        '<div class="term-bar"><i></i><i></i><i></i><span>favour@portfolio: ~/works/' + w.slug + '</span></div>' +
+        '<div class="wk-body">' +
+          '<p class="wk-cmd"><span class="g">$</span> open ' + w.slug + '</p>' +
+          '<h3 id="wt-' + w.slug + '">' + esc(w.name) + '</h3>' +
+          '<p class="wk-kind">' + esc(w.kind) + (w.year ? ' · ' + w.year : '') + '</p>' +
+          '<img class="wk-shot" src="' + w.img + '" alt="Screenshot of ' + esc(w.name) + '" loading="lazy">' +
+          '<p class="wk-about">' + esc(w.about) + '</p>' +
+          (w.did.length ? '<ul class="wk-did">' + w.did.map(function (d) { return '<li>' + esc(d) + '</li>'; }).join('') + '</ul>' : '') +
+          '<ul class="tags small" aria-label="Stack">' + w.tags.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' +
+          (links ? '<div class="wk-links">' + links + '</div>' : '') +
+          (w.note ? '<p class="wk-note">// ' + esc(w.note) + '</p>' : '') +
+        '</div></div></article>';
+  }).join('');
+  list.addEventListener('click', function (e) { if (e.target.closest('[data-demo]')) openDemo(); });
+
+  function goToWork(slug) {
+    var el = document.getElementById('work-' + slug);
+    if (!el) return;
+    el.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    el.classList.remove('hl'); void el.offsetWidth; el.classList.add('hl');
+  }
+
+  var cubes = Array.prototype.map.call(list.querySelectorAll('.wk-cube'), function (el, i) {
+    return { el: el, c3: el.querySelector('.c3'), ry: 20 + i * 47, rx: -16, v: 0.011 + (i % 3) * 0.003, hover: false, front: 0, phase: i * 1.3, visible: true };
   });
   function nearest(a, b) { var d = ((b - a) % 360 + 540) % 360 - 180; return a + d; }
   function paintCube(c) { c.c3.style.transform = 'rotateX(' + c.rx.toFixed(2) + 'deg) rotateY(' + c.ry.toFixed(2) + 'deg)'; }
-  function focusCube(slug) {
-    cubes.forEach(function (c) { c.active = c.slug === slug; c.el.classList.toggle('on', c.active); });
-    if (reduceMotion) cubes.forEach(function (c) { if (c.active) { c.ry = -24; c.rx = -10; } paintCube(c); });
-  }
   cubes.forEach(function (c) {
     c.el.addEventListener('pointerenter', function () { c.hover = true; });
     c.el.addEventListener('pointerleave', function () { c.hover = false; });
-    c.el.addEventListener('click', function () {
-      run('open ' + c.slug);
-      // On narrow screens the terminal sits below the cubes, so bring it into view
-      if (window.matchMedia('(max-width: 880px)').matches) $('#term').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
-    });
+    // Tap a cube to turn it to its screenshot for a few seconds
+    c.el.addEventListener('click', function () { c.front = performance.now() + 4000; });
+    if (reduceMotion) { c.ry = -24; c.rx = -10; }
     paintCube(c);
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { c.visible = es[0].isIntersecting; }).observe(c.el);
   });
   (function spinAll() {
     if (reduceMotion) return;
-    var lastT = 0, visible = true;
-    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }).observe(grid);
+    var lastT = 0;
     function tick(t) {
       var dt = lastT ? Math.min(50, t - lastT) : 16; lastT = t;
-      if (visible) cubes.forEach(function (c) {
-        if (c.active) {
-          // Ease round to the screenshot, slightly angled so it still reads as a cube
-          var ty = nearest(c.ry, -24);
-          c.ry += (ty - c.ry) * 0.08; c.rx += (-10 - c.rx) * 0.08;
+      cubes.forEach(function (c) {
+        if (!c.visible) return;
+        if (t < c.front) {
+          c.ry += (nearest(c.ry, -24) - c.ry) * 0.08; c.rx += (-10 - c.rx) * 0.08;
         } else {
           c.ry += dt * c.v * (c.hover ? 0.2 : 1);
           c.rx = -16 + Math.sin(t / 2600 + c.phase) * 7;
@@ -456,132 +479,6 @@
     }
     requestAnimationFrame(tick);
   })();
-
-  /* ------------------------------------------------------------------
-   * The CLI
-   * ------------------------------------------------------------------ */
-  var out = $('#out'), input = $('#cmd'), history = [], hi = 0, opened = false;
-  function print(html, cls) { var p = document.createElement('p'); if (cls) p.className = cls; p.innerHTML = html; out.appendChild(p); out.scrollTop = out.scrollHeight; return p; }
-  function blank() { print(''); }
-  function findWork(q) {
-    q = (q || '').toLowerCase().trim();
-    if (!q) return null;
-    var n = parseInt(q, 10);
-    if (!isNaN(n) && WORKS[n - 1]) return WORKS[n - 1];
-    return WORKS.filter(function (w) { return w.slug === q || w.slug.indexOf(q) === 0 || w.name.toLowerCase().indexOf(q) === 0; })[0] || null;
-  }
-
-  var COMMANDS = {
-    help: function () {
-      [['ls', 'list the work'], ['open <name|#>', 'open a project (spins the cube)'], ['run lagos-life', 'play the Lagos Life demo'], ['cat snippets', 'jump to my code'], ['whoami', 'who built this'], ['skills', 'what I work with'], ['contact', 'how to reach me'], ['clear', 'clear the screen']]
-        .forEach(function (r) { print('  <span class="ok">' + esc(r[0]).padEnd(16, ' ') + '</span><span class="dim">' + r[1] + '</span>'); });
-      print('  <span class="dim">tip: tab completes names, ↑ ↓ go through history</span>');
-    },
-    ls: function () {
-      WORKS.forEach(function (w, i) {
-        print('  <span class="dim">' + String(i + 1).padStart(2, '0') + '</span>  <span class="ok">' + w.slug.padEnd(18, ' ') + '</span><span class="dim">' + esc(w.kind) + '</span>');
-      });
-    },
-    open: function (arg) {
-      if (/^snippets?$/i.test(arg || '')) { document.getElementById('snippets').scrollIntoView({ behavior: 'smooth' }); print('<span class="dim">opening ./snippets…</span>'); return; }
-      var w = findWork(arg);
-      if (!w) { print('open: no such work: ' + esc(arg || '') + ' <span class="dim">(try ls)</span>', 'warn'); return; }
-      opened = true;
-      focusCube(w.slug);
-      document.querySelectorAll('#tree button.work').forEach(function (b) { b.classList.toggle('on', b.dataset.slug === w.slug); });
-      print('<span class="ok">▸ ' + esc(w.name) + '</span>  <span class="dim">' + esc(w.kind) + (w.year ? ' · ' + w.year : '') + '</span>');
-      print('<img class="thumb" src="' + w.img + '" alt="Screenshot of ' + esc(w.name) + '">');
-      if (w.about) print('  ' + esc(w.about));
-      if (w.did.length) { print('  <span class="key">built:</span>'); w.did.forEach(function (d) { print('   - ' + esc(d)); }); }
-      print('  <span class="key">stack:</span> ' + w.tags.map(esc).join(', '));
-      if (w.links.length || w.demo) {
-        var p = print('  ');
-        if (w.demo) p.insertAdjacentHTML('beforeend', '<button class="inline" type="button" data-run="run ' + w.slug + '">▶ play demo</button>');
-        w.links.forEach(function (l) { p.insertAdjacentHTML('beforeend', ' <a href="' + l[1] + '" target="_blank" rel="noopener">' + l[0] + ' ↗</a> '); });
-      }
-      if (w.note) print('  <span class="dim">' + esc(w.note) + '</span>');
-      if (w.todo) print('  <span class="warn"># todo: ' + esc(w.todo) + '</span>');
-    },
-    run: function (arg) {
-      var w = findWork(arg || 'lagos-life');
-      if (!w || !w.demo) { print('run: ' + esc(arg || '') + ' has no live demo here. Try <span class="ok">run lagos-life</span>', 'warn'); return; }
-      print('<span class="dim">starting lagos-life… opening the phone</span>');
-      openDemo();
-    },
-    whoami: function () {
-      print('<span class="ok">Oyende Favour</span> <span class="dim">(Fayo)</span>');
-      print('  full-stack developer · Calgary, AB · born in Nigeria');
-      print('  frontend development + backend model refinement');
-      print('  <a href="#about">more in ./about</a>');
-    },
-    skills: function () {
-      print('  <span class="key">code</span>    TypeScript, JavaScript, React, React Native, Python, Java, SQL');
-      print('  <span class="key">data</span>    Firebase, graph databases');
-      print('  <span class="key">mobile</span>  React Native, Expo');
-      print('  <span class="key">design</span>  UI design, UX design, UX research, prototyping, animation');
-    },
-    contact: function () {
-      print('  <span class="key">email</span>    <a href="mailto:oyendefavour12@gmail.com">oyendefavour12@gmail.com</a>');
-      print('  <span class="key">behance</span>  <a href="https://www.behance.net/oyendefavour" target="_blank" rel="noopener">behance.net/oyendefavour</a>');
-      print('  <span class="key">github</span>   <a href="https://github.com/Fayo08" target="_blank" rel="noopener">github.com/Fayo08</a>');
-    },
-    clear: function () { out.innerHTML = ''; },
-    sudo: function (arg) {
-      if (/hire/i.test(arg || '')) { print('[sudo] permission granted 🎉', 'ok'); COMMANDS.contact(); }
-      else print('nice try. only <span class="ok">sudo hire favour</span> works here.', 'warn');
-    },
-  };
-  COMMANDS.cd = COMMANDS.open; COMMANDS.cat = COMMANDS.open;
-  COMMANDS.works = COMMANDS.ls; COMMANDS.dir = COMMANDS.ls; COMMANDS.about = COMMANDS.whoami;
-
-  function run(line) {
-    line = line.trim();
-    print('<span class="ps">$</span> ' + esc(line), 'cmd');
-    if (!line) return;
-    history.push(line); hi = history.length;
-    var parts = line.split(/\s+/), name = parts.shift().toLowerCase(), arg = parts.join(' ');
-    var fn = COMMANDS[name];
-    if (fn) fn(arg);
-    else if (findWork(line)) COMMANDS.open(line);
-    else print(esc(name) + ': command not found. type <span class="ok">help</span>', 'warn');
-    blank();
-  }
-
-  $('#cli').addEventListener('submit', function (e) { e.preventDefault(); run(input.value); input.value = ''; });
-  input.addEventListener('keydown', function (e) {
-    if (e.key === 'ArrowUp') { if (hi > 0) { hi--; input.value = history[hi]; } e.preventDefault(); }
-    else if (e.key === 'ArrowDown') { if (hi < history.length - 1) { hi++; input.value = history[hi]; } else { hi = history.length; input.value = ''; } e.preventDefault(); }
-    else if (e.key === 'Tab') {
-      var m = input.value.match(/^(open|run|cd|cat)\s+(\S*)$/i);
-      if (m) {
-        var hit = WORKS.filter(function (w) { return w.slug.indexOf(m[2].toLowerCase()) === 0; });
-        if (hit.length === 1) { input.value = m[1] + ' ' + hit[0].slug; e.preventDefault(); }
-        else if (hit.length > 1) { print(hit.map(function (w) { return w.slug; }).join('   '), 'dim'); e.preventDefault(); }
-      }
-    }
-  });
-  out.addEventListener('click', function (e) { var b = e.target.closest('[data-run]'); if (b) run(b.dataset.run); });
-
-  var chips = $('#chips');
-  ['help', 'ls', 'open lagos-life', 'run lagos-life', 'whoami', 'sudo hire favour'].forEach(function (c) {
-    var b = document.createElement('button'); b.type = 'button'; b.textContent = c;
-    b.addEventListener('click', function () { run(c); });
-    chips.appendChild(b);
-  });
-
-  /* Boot: banner, then `ls` and the featured work when the section first comes into view */
-  print('<span class="ascii"> ┌─┐┬ ┬┌─┐┌┐┌┌┬┐┌─┐  ┌─┐┌─┐┬  ┬┌─┐┬ ┬┬─┐\n │ │└┬┘├┤ │││ ││├┤   ├┤ ├─┤└┐┌┘│ ││ │├┬┘\n └─┘ ┴ └─┘┘└┘─┴┘└─┘  └  ┴ ┴ └┘ └─┘└─┘┴└─</span>');
-  print('<span class="dim">portfolio v2026 · type</span> <span class="ok">help</span> <span class="dim">or tap a command below</span>');
-  blank();
-  // List the work when the section first comes into view, unless something is already open
-  var booted = false;
-  function boot() {
-    if (booted) return; booted = true;
-    setTimeout(function () { if (!opened) { run('ls'); print('<span class="dim">tap a cube, or type</span> <span class="ok">open &lt;name&gt;</span>'); blank(); } }, 300);
-  }
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (es, o) { if (es.some(function (x) { return x.isIntersecting; })) { boot(); o.disconnect(); } }, { threshold: 0.3 }).observe($('#works'));
-  } else boot();
 
   /* ------------------------------------------------------------------
    * Demo modal

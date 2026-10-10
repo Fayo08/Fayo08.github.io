@@ -345,3 +345,37 @@ footer { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wr
 .tags li::after { content: " />"; color: var(--green-2); }
 .tags li:hover { border-color: var(--green); color: var(--green); }
 @media (max-width: 480px) { .top .path { display: none; } .top nav { margin-left: 0; } }
+
+/* ------------------------------------------------------------------
+ * Works: one calm section per project — cube on one side, its own
+ * terminal window on the other. Readable sans text, green for accents.
+ * ------------------------------------------------------------------ */
+.work-list { display: grid; gap: clamp(64px, 10vw, 120px); }
+.wk { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(24px, 5vw, 64px); align-items: center; scroll-margin-top: 76px; }
+.wk.flip .wk-cube { order: 2; }
+@media (max-width: 860px) { .wk { grid-template-columns: minmax(0, 1fr); gap: 8px; } .wk.flip .wk-cube { order: 0; } }
+.wk-cube { position: relative; display: grid; justify-items: center; gap: 10px; padding: 34px 0 10px; --c: clamp(150px, 19vw, 220px); cursor: pointer; }
+.wk-cube .wires { position: absolute; inset: 0 -12%; width: 124%; height: 100%; z-index: 0; }
+.wk-cube .cube3 { position: relative; z-index: 1; }
+.wk-cube .cap { position: relative; z-index: 1; font-size: 0.78rem; }
+.wk-term { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; min-width: 0; transition: border-color .4s, box-shadow .4s; }
+.wk.hl .wk-term { animation: hl 2.2s ease-out; }
+@keyframes hl { 0%, 40% { border-color: var(--green); box-shadow: 0 0 0 1px var(--green), 0 0 40px rgba(46, 226, 122, 0.18); } 100% { border-color: var(--line); box-shadow: none; } }
+.wk-body { padding: clamp(18px, 3vw, 30px); display: grid; gap: 14px; justify-items: start; }
+.wk-cmd { font-size: 0.8rem; color: var(--muted); }
+.wk-body h3 { font-size: clamp(1.6rem, 1.1rem + 1.6vw, 2.3rem); font-weight: 600; color: #f2f7f3; letter-spacing: -0.02em; line-height: 1.1; margin-top: -4px; }
+.wk-kind { color: var(--green); font-size: 0.85rem; margin-top: -8px; }
+.wk-shot { width: 100%; max-height: 230px; object-fit: cover; object-position: top center; border-radius: 8px; border: 1px solid var(--line); background: #e9eee9; display: block; }
+.wk-about { font-family: var(--sans); font-size: 1.02rem; line-height: 1.65; color: #cbd9cf; max-width: 62ch; }
+.wk-did { margin: 0; padding-left: 1.1em; font-family: var(--sans); font-size: 0.95rem; line-height: 1.55; color: #aebfb3; display: grid; gap: 4px; }
+.wk-did li::marker { color: var(--green-2); }
+.tags.small { gap: 6px; }
+.tags.small li { font-size: 0.75rem; padding: 2px 9px; }
+.wk-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
+.wbtn { all: unset; box-sizing: border-box; cursor: pointer; font-family: var(--mono); font-size: 0.85rem; padding: 8px 14px; border: 1px solid var(--green-2); border-radius: 6px; color: var(--green); transition: background .15s, color .15s; }
+.wbtn:hover, .wbtn:focus-visible { background: rgba(46, 226, 122, 0.1); }
+.wbtn:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+.wbtn.primary { background: var(--green); color: var(--bg); border-color: var(--green); font-weight: 700; }
+.wbtn.primary:hover { background: #5cf09a; }
+.wk-note { font-size: 0.8rem; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { .wk.hl .wk-term { animation: none; } }

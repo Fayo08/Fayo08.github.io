@@ -79,35 +79,9 @@
     <section class="works" id="works" aria-labelledby="works-title">
       <div class="sect-head">
         <h2 id="works-title"><span class="g">&lt;</span>Works<span class="g"> /&gt;</span></h2>
-        <p class="comment">// tap a cube to open it, or type <kbd>help</kbd></p>
+        <p class="comment">// one project at a time · tap a cube to turn it</p>
       </div>
-      <div class="works-grid">
-        <div class="cubes-wrap">
-          <svg class="wires" viewBox="0 0 600 600" preserveAspectRatio="none" aria-hidden="true">
-            <g class="base">
-              <line x1="10" y1="190" x2="590" y2="120"/><line x1="40" y1="310" x2="575" y2="245"/>
-              <line x1="95" y1="545" x2="525" y2="35"/><line x1="390" y1="40" x2="595" y2="565"/>
-              <line x1="20" y1="430" x2="350" y2="335"/><line x1="230" y1="585" x2="595" y2="470"/>
-              <line x1="586" y1="70" x2="570" y2="590"/><line x1="85" y1="205" x2="105" y2="480"/>
-              <line x1="150" y1="60" x2="300" y2="140"/>
-            </g>
-            <g class="flow">
-              <line x1="10" y1="190" x2="590" y2="120"/><line x1="95" y1="545" x2="525" y2="35"/>
-              <line x1="230" y1="585" x2="595" y2="470"/><line x1="586" y1="70" x2="570" y2="590"/>
-            </g>
-          </svg>
-          <div class="cubes" id="cubes"></div>
-        </div>
-        <div class="term" id="term" aria-label="Command line">
-          <div class="term-bar"><i></i><i></i><i></i><span>favour@portfolio: ~/works</span></div>
-          <div class="term-out" id="out" role="log" aria-live="polite"></div>
-          <form class="term-in" id="cli" autocomplete="off">
-            <label for="cmd" class="prompt-line"><span class="g">favour@portfolio</span>:<span class="b">~/works</span>$</label>
-            <input id="cmd" name="cmd" spellcheck="false" autocapitalize="off" aria-label="Type a command, for example help">
-          </form>
-          <div class="chips" id="chips" aria-label="Quick commands"></div>
-        </div>
-      </div>
+      <div class="work-list" id="workList"></div>
     </section>
 
     <!-- About: photo as an image preview, bio as a code object -->
