@@ -13,7 +13,7 @@
   var WORKS = [
     {
       slug: 'lagos-life', name: 'Lagos Life Besties', year: '2026', kind: 'Game feature · solo',
-      img: 'media/lagos-ride.webp', tags: ['TypeScript', 'Canvas', 'Vite', 'Tests'],
+      img: 'media/lagos-ride.webp', img2: 'media/lagos-land.webp', tags: ['TypeScript', 'Canvas', 'Vite', 'Tests'],
       about: 'A playable feature concept for Lagos Life, the Nigerian life-sim. Chat with a friend three days in a row and you unlock a company together. Ride through Lagos in a keke, danfo or their car, get stuck in the Third Mainland go-slow, and land together at Quilox.',
       did: ['Designed the loop: chat streaks, trust, co-owned companies, shared rides', 'Canvas renderer for the drive, three cameras, isometric venues, day and night', '36 tests on the game rules; money splits in basis points, no naira lost', 'CI/CD on GitHub Actions'],
       links: [['play', 'https://fayo08.github.io/LagosLifeBestieDemo/'], ['code', 'https://github.com/Fayo08/LagosLifeBestieDemo']],
@@ -393,76 +393,74 @@
   })();
 
   /* ------------------------------------------------------------------
-   * The cube: six faces, one per work. Drag to spin, tap a face to open.
+   * A cube per work. Each spins on its own; tap one to open it in the CLI.
+   * Faces: front = screenshot, right = name, back = about (or a 2nd shot),
+   * left = stack, top/bottom = the command that opens it.
    * ------------------------------------------------------------------ */
-  var cube = $('#cube');
-  var FACES = [
-    { rx: 0, ry: 0, tf: 'rotateY(0deg)' },
-    { rx: 0, ry: -90, tf: 'rotateY(90deg)' },
-    { rx: 0, ry: -180, tf: 'rotateY(180deg)' },
-    { rx: 0, ry: 90, tf: 'rotateY(-90deg)' },
-    { rx: -90, ry: 0, tf: 'rotateX(90deg)' },
-    { rx: 90, ry: 0, tf: 'rotateX(-90deg)' },
-  ];
-  cube.innerHTML = WORKS.map(function (w, i) {
-    return '<div class="face" data-slug="' + w.slug + '" style="transform:' + FACES[i].tf + ' translateZ(calc(var(--cube) / 2))">' +
-      '<div class="term-bar"><i></i><i></i><i></i><span>~/works/' + w.slug + '</span></div>' +
-      '<div class="shot"><img src="' + w.img + '" alt="" loading="lazy" draggable="false"></div>' +
-      '<div class="face-body"><span class="k">// ' + String(i + 1).padStart(2, '0') + '</span><h3>' + w.name + '</h3>' +
-      '<span class="meta">' + w.kind + (w.year ? ' · ' + w.year : '') + '</span>' +
-      '<span class="run">$ <b>open ' + w.slug + '</b></span></div></div>';
+  var grid = $('#cubes');
+  function faceSet(w, i) {
+    var bar = '<span class="bar"><i></i><i></i><i></i><em>' + w.slug + '</em></span>';
+    var back = w.img2
+      ? '<span class="f f-back">' + bar + '<img src="' + w.img2 + '" alt="" loading="lazy" draggable="false"></span>'
+      : '<span class="f f-back f-about"><span class="k">// about</span>' + esc(w.about.split('. ')[0].slice(0, 120)) + (w.about.length > 120 ? '…' : '.') + '</span>';
+    return '<span class="f f-front">' + bar + '<img src="' + w.img + '" alt="" loading="lazy" draggable="false"></span>' +
+      '<span class="f f-right f-name"><span class="k">// ' + String(i + 1).padStart(2, '0') + '</span><b>' + esc(w.name) + '</b><span>' + esc(w.kind) + (w.year ? ' · ' + w.year : '') + '</span></span>' +
+      back +
+      '<span class="f f-left f-tags"><span class="k">// stack</span>' + w.tags.map(function (t) { return '<span class="chip">' + esc(t) + '</span>'; }).join('') + '</span>' +
+      '<span class="f f-top f-cmd">$ open<br><b>' + w.slug + '</b></span>' +
+      '<span class="f f-bottom f-cmd">$ open<br><b>' + w.slug + '</b></span>';
+  }
+  grid.innerHTML = WORKS.map(function (w, i) {
+    return '<button class="cell" type="button" data-slug="' + w.slug + '" aria-label="Open ' + esc(w.name) + '">' +
+      '<span class="cube3"><span class="c3">' + faceSet(w, i) + '</span></span><span class="shadow" aria-hidden="true"></span>' +
+      '<span class="cap"><span class="n">' + String(i + 1).padStart(2, '0') + '</span> ' + esc(w.name) + '</span></button>';
   }).join('');
 
-  var rot = { x: -18, y: 28 }, target = null, auto = !reduceMotion, idleAt = 0, dragging = false;
-  function applyRot() { cube.style.transform = 'rotateX(' + rot.x + 'deg) rotateY(' + rot.y + 'deg)'; }
+  var cubes = Array.prototype.map.call(grid.querySelectorAll('.cell'), function (el, i) {
+    return { el: el, c3: el.querySelector('.c3'), slug: el.dataset.slug, ry: 20 + i * 47, rx: -16, v: 0.011 + (i % 3) * 0.003, hover: false, active: false, phase: i * 1.3 };
+  });
   function nearest(a, b) { var d = ((b - a) % 360 + 540) % 360 - 180; return a + d; }
-  function showFace(i) {
-    var f = FACES[i];
-    target = { x: nearest(rot.x, f.rx - 8), y: nearest(rot.y, f.ry + 12) };
-    auto = false; idleAt = performance.now() + 9000;
-    cube.querySelectorAll('.face').forEach(function (el, k) { el.classList.toggle('on', k === i); });
-    if (reduceMotion) { rot = target; target = null; applyRot(); }
+  function paintCube(c) { c.c3.style.transform = 'rotateX(' + c.rx.toFixed(2) + 'deg) rotateY(' + c.ry.toFixed(2) + 'deg)'; }
+  function focusCube(slug) {
+    cubes.forEach(function (c) { c.active = c.slug === slug; c.el.classList.toggle('on', c.active); });
+    if (reduceMotion) cubes.forEach(function (c) { if (c.active) { c.ry = -24; c.rx = -10; } paintCube(c); });
   }
-  (function spin() {
-    var lastT = 0;
+  cubes.forEach(function (c) {
+    c.el.addEventListener('pointerenter', function () { c.hover = true; });
+    c.el.addEventListener('pointerleave', function () { c.hover = false; });
+    c.el.addEventListener('click', function () {
+      run('open ' + c.slug);
+      // On narrow screens the terminal sits below the cubes, so bring it into view
+      if (window.matchMedia('(max-width: 880px)').matches) $('#term').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+    });
+    paintCube(c);
+  });
+  (function spinAll() {
+    if (reduceMotion) return;
+    var lastT = 0, visible = true;
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }).observe(grid);
     function tick(t) {
       var dt = lastT ? Math.min(50, t - lastT) : 16; lastT = t;
-      if (target) {
-        rot.x += (target.x - rot.x) * 0.08; rot.y += (target.y - rot.y) * 0.08;
-        if (Math.abs(target.x - rot.x) < 0.05 && Math.abs(target.y - rot.y) < 0.05) { rot = target; target = null; }
-      } else if (auto && !dragging) {
-        rot.y += dt * 0.012; rot.x = -18 + Math.sin(t / 2400) * 6;
-      } else if (!dragging && idleAt && t > idleAt) { auto = true; idleAt = 0; }
-      applyRot();
+      if (visible) cubes.forEach(function (c) {
+        if (c.active) {
+          // Ease round to the screenshot, slightly angled so it still reads as a cube
+          var ty = nearest(c.ry, -24);
+          c.ry += (ty - c.ry) * 0.08; c.rx += (-10 - c.rx) * 0.08;
+        } else {
+          c.ry += dt * c.v * (c.hover ? 0.2 : 1);
+          c.rx = -16 + Math.sin(t / 2600 + c.phase) * 7;
+        }
+        paintCube(c);
+      });
       requestAnimationFrame(tick);
     }
-    applyRot();
-    if (!reduceMotion) requestAnimationFrame(tick);
+    requestAnimationFrame(tick);
   })();
-
-  var start = null, moved = false;
-  var stage = $('#stage');
-  stage.addEventListener('pointerdown', function (e) { dragging = true; moved = false; start = { x: e.clientX, y: e.clientY, rx: rot.x, ry: rot.y }; target = null; auto = false; stage.setPointerCapture(e.pointerId); });
-  stage.addEventListener('pointermove', function (e) {
-    if (!dragging) return;
-    var dx = e.clientX - start.x, dy = e.clientY - start.y;
-    if (Math.abs(dx) + Math.abs(dy) > 4) moved = true;
-    rot.y = start.ry + dx * 0.45; rot.x = Math.max(-80, Math.min(80, start.rx - dy * 0.45));
-    if (reduceMotion) applyRot();
-  });
-  function endDrag() { if (!dragging) return; dragging = false; idleAt = performance.now() + 6000; }
-  stage.addEventListener('pointerup', endDrag);
-  stage.addEventListener('pointercancel', endDrag);
-  cube.addEventListener('click', function (e) {
-    if (moved) return;
-    var f = e.target.closest('.face');
-    if (f) run('open ' + f.dataset.slug);
-  });
 
   /* ------------------------------------------------------------------
    * The CLI
    * ------------------------------------------------------------------ */
-  var out = $('#out'), input = $('#cmd'), history = [], hi = 0;
+  var out = $('#out'), input = $('#cmd'), history = [], hi = 0, opened = false;
   function print(html, cls) { var p = document.createElement('p'); if (cls) p.className = cls; p.innerHTML = html; out.appendChild(p); out.scrollTop = out.scrollHeight; return p; }
   function blank() { print(''); }
   function findWork(q) {
@@ -488,7 +486,8 @@
       if (/^snippets?$/i.test(arg || '')) { document.getElementById('snippets').scrollIntoView({ behavior: 'smooth' }); print('<span class="dim">opening ./snippets…</span>'); return; }
       var w = findWork(arg);
       if (!w) { print('open: no such work: ' + esc(arg || '') + ' <span class="dim">(try ls)</span>', 'warn'); return; }
-      showFace(WORKS.indexOf(w));
+      opened = true;
+      focusCube(w.slug);
       document.querySelectorAll('#tree button.work').forEach(function (b) { b.classList.toggle('on', b.dataset.slug === w.slug); });
       print('<span class="ok">▸ ' + esc(w.name) + '</span>  <span class="dim">' + esc(w.kind) + (w.year ? ' · ' + w.year : '') + '</span>');
       print('<img class="thumb" src="' + w.img + '" alt="Screenshot of ' + esc(w.name) + '">');
@@ -574,11 +573,11 @@
   print('<span class="ascii"> ┌─┐┬ ┬┌─┐┌┐┌┌┬┐┌─┐  ┌─┐┌─┐┬  ┬┌─┐┬ ┬┬─┐\n │ │└┬┘├┤ │││ ││├┤   ├┤ ├─┤└┐┌┘│ ││ │├┬┘\n └─┘ ┴ └─┘┘└┘─┴┘└─┘  └  ┴ ┴ └┘ └─┘└─┘┴└─</span>');
   print('<span class="dim">portfolio v2026 · type</span> <span class="ok">help</span> <span class="dim">or tap a command below</span>');
   blank();
+  // List the work when the section first comes into view, unless something is already open
   var booted = false;
   function boot() {
     if (booted) return; booted = true;
-    setTimeout(function () { run('ls'); }, 300);
-    setTimeout(function () { run('open lagos-life'); }, 1300);
+    setTimeout(function () { if (!opened) { run('ls'); print('<span class="dim">tap a cube, or type</span> <span class="ok">open &lt;name&gt;</span>'); blank(); } }, 300);
   }
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (es, o) { if (es.some(function (x) { return x.isIntersecting; })) { boot(); o.disconnect(); } }, { threshold: 0.3 }).observe($('#works'));

@@ -21,6 +21,7 @@
     <nav aria-label="Sections">
       <a href="#works">works</a>
       <a href="#about">about</a>
+      <a href="#skills">skills</a>
       <a href="#snippets">code</a>
       <a href="#contact">contact</a>
     </nav>
@@ -78,10 +79,10 @@
     <section class="works" id="works" aria-labelledby="works-title">
       <div class="sect-head">
         <h2 id="works-title"><span class="g">&lt;</span>Works<span class="g"> /&gt;</span></h2>
-        <p class="comment">// drag the cube, tap a face, or type <kbd>help</kbd></p>
+        <p class="comment">// tap a cube to open it, or type <kbd>help</kbd></p>
       </div>
       <div class="works-grid">
-        <div class="stage" id="stage">
+        <div class="cubes-wrap">
           <svg class="wires" viewBox="0 0 600 600" preserveAspectRatio="none" aria-hidden="true">
             <g class="base">
               <line x1="10" y1="190" x2="590" y2="120"/><line x1="40" y1="310" x2="575" y2="245"/>
@@ -95,8 +96,7 @@
               <line x1="230" y1="585" x2="595" y2="470"/><line x1="586" y1="70" x2="570" y2="590"/>
             </g>
           </svg>
-          <div class="float"><div class="cube" id="cube"></div></div>
-          <div class="floor" aria-hidden="true"></div>
+          <div class="cubes" id="cubes"></div>
         </div>
         <div class="term" id="term" aria-label="Command line">
           <div class="term-bar"><i></i><i></i><i></i><span>favour@portfolio: ~/works</span></div>
@@ -125,10 +125,7 @@
         </div>
         <div class="editor small about-obj">
           <div class="tabs" aria-hidden="true"><span class="tab on">favour.ts</span></div>
-          <pre class="obj" aria-label="Favour's skills and experience, written as a code object"><span class="k">const</span> <span class="v">favour</span> = {
-  <span class="p">skills</span>: [<span class="s">"TypeScript"</span>, <span class="s">"React Native"</span>, <span class="s">"JavaScript"</span>, <span class="s">"Python"</span>,
-           <span class="s">"Java"</span>, <span class="s">"SQL"</span>, <span class="s">"Firebase"</span>, <span class="s">"Graph databases"</span>, <span class="s">"Expo"</span>],
-  <span class="p">design</span>: [<span class="s">"UI design"</span>, <span class="s">"UX design"</span>, <span class="s">"UX research"</span>, <span class="s">"Prototyping"</span>, <span class="s">"Animation"</span>],
+          <pre class="obj" aria-label="Favour's experience, written as a code object"><span class="k">const</span> <span class="v">favour</span> = {
   <span class="p">experience</span>: [
     { <span class="p">role</span>: <span class="s">"Full-stack Developer"</span>, <span class="p">at</span>: <span class="s">"MyAreaa"</span>,  <span class="p">since</span>: <span class="s">"Jan 2026"</span> },
     { <span class="p">role</span>: <span class="s">"Software Developer"</span>,   <span class="p">at</span>: <span class="s">"MakeItMVP"</span>, <span class="p">since</span>: <span class="s">"Mar 2025"</span> },
@@ -138,6 +135,21 @@
   <span class="p">speaks</span>: [<span class="s">"English"</span>, <span class="s">"Yorùbá"</span>, <span class="s">"Français (un peu)"</span>],
 };</pre>
         </div>
+      </div>
+    </section>
+
+    <!-- Skills, grouped, as tags -->
+    <section class="skills" id="skills" aria-labelledby="skills-title">
+      <div class="sect-head">
+        <h2 id="skills-title"><span class="g">&lt;</span>Skills<span class="g"> /&gt;</span></h2>
+        <p class="comment">// what I build with</p>
+      </div>
+      <div class="skill-groups">
+        <div class="sg"><h3><span class="g">#</span> languages</h3><ul class="tags"><li>TypeScript</li><li>JavaScript</li><li>Python</li><li>Java</li><li>SQL</li></ul></div>
+        <div class="sg"><h3><span class="g">#</span> frontend &amp; mobile</h3><ul class="tags"><li>React</li><li>React Native</li><li>Expo</li><li>Vite</li><li>Tailwind</li><li>Sass</li><li>Canvas</li></ul></div>
+        <div class="sg"><h3><span class="g">#</span> backend &amp; data</h3><ul class="tags"><li>Node + Express</li><li>MySQL + Knex</li><li>Firebase</li><li>Graph databases</li><li>REST APIs</li></ul></div>
+        <div class="sg"><h3><span class="g">#</span> design</h3><ul class="tags"><li>UI design</li><li>UX design</li><li>UX research</li><li>Prototyping</li><li>Animation</li></ul></div>
+        <div class="sg"><h3><span class="g">#</span> shipping</h3><ul class="tags"><li>Git &amp; GitHub</li><li>GitHub Actions CI/CD</li><li>Testing</li><li>Jira / Agile</li></ul></div>
       </div>
     </section>
 
