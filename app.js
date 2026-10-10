@@ -4,169 +4,363 @@
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var $ = function (s) { return document.querySelector(s); };
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
   /* ------------------------------------------------------------------
-   * The work. One list drives the tree, the cube faces and the CLI.
-   * `todo` lines show in amber until Favour fills them in.
+   * The work. One list drives the tree, the cube faces, the CLI and the rain.
+   * `todo` lines show in amber until the link is added.
    * ------------------------------------------------------------------ */
   var WORKS = [
     {
       slug: 'lagos-life', name: 'Lagos Life Besties', year: '2026', kind: 'Game feature · solo',
-      tags: ['TypeScript', 'Canvas', 'Vite', 'Tests'],
+      img: 'media/lagos-ride.webp', tags: ['TypeScript', 'Canvas', 'Vite', 'Tests'],
       about: 'A playable feature concept for Lagos Life, the Nigerian life-sim. Chat with a friend three days in a row and you unlock a company together. Ride through Lagos in a keke, danfo or their car, get stuck in the Third Mainland go-slow, and land together at Quilox.',
-      did: ['Designed the whole loop: streaks, trust, co-owned companies, shared rides', 'Canvas renderer for the drive, three cameras, isometric venues, day and night', '36 tests on the game rules; money splits in basis points, no naira lost', 'CI/CD on GitHub Actions'],
+      did: ['Designed the loop: chat streaks, trust, co-owned companies, shared rides', 'Canvas renderer for the drive, three cameras, isometric venues, day and night', '36 tests on the game rules; money splits in basis points, no naira lost', 'CI/CD on GitHub Actions'],
       links: [['play', 'https://fayo08.github.io/LagosLifeBestieDemo/'], ['code', 'https://github.com/Fayo08/LagosLifeBestieDemo']],
       demo: true,
     },
     {
-      slug: 'talent-trace', name: 'TalentTrace', year: '2025', kind: 'Team project · Communiti',
-      tags: ['React', 'Vite', 'Tailwind', 'Firebase'],
-      about: 'Snapshot, a feature for the Communiti platform. New tech grads answer guided questions and get a polished one-page skills snapshot in under five minutes, shareable as a link, PDF or image.',
-      did: ['Built the landing hero', 'Saved users’ answers to Firebase'],
+      slug: 'myareaa', name: 'MyAreaa', year: '2026', kind: 'Full-stack · community fintech',
+      img: 'media/myareaa.webp', tags: ['Full-stack', 'Fintech', 'Community'],
+      about: 'MyAreaa is about financial well-being. It is a community-focused app that provides financial services for users: they can donate, save and contribute money towards a shared goal.',
+      did: [], links: [], todo: 'add the link to MyAreaa',
+    },
+    {
+      slug: 'talent-trace', name: 'TalentTrace', year: '2025', kind: 'Snapshot for Communiti · MakeItMVP',
+      img: 'media/talenttrace.webp', tags: ['React', 'Vite', 'Tailwind', 'Firebase'],
+      about: 'The problem: how do you help job-seekers showcase their skills and achievements quickly and effectively? I built Snapshot, a dynamic, exportable profile that puts their key strengths front and centre so candidates stand out in a competitive job market.',
+      did: ['Built the Snapshot feature with the team at MakeItMVP', 'Landing hero, and saving users’ answers to Firebase'],
       links: [['code', 'https://github.com/Fayo08/TalentTrace']],
-      todo: 'add the live link',
     },
     {
-      slug: 'instock', name: 'InStock', year: '', kind: 'Web app',
-      tags: ['Web app'],
-      about: '',
-      did: [],
-      links: [],
-      todo: 'one line on what InStock does, your part, stack and link',
+      slug: 'instock', name: 'InStock', year: '', kind: 'Inventory management web app',
+      img: 'media/instock.webp', tags: ['React', 'Web app'],
+      about: 'Inventory management for warehouses. Users can add, edit and delete warehouses and the managers in charge of them, view each warehouse’s inventory, edit item details and create new items.',
+      did: [], links: [], todo: 'add the repo link',
     },
     {
-      slug: 'find-my-mechanic', name: 'Find My Mechanic', year: '', kind: 'Mobile app · UX',
-      tags: ['UX', 'Mobile'],
-      about: 'A mobile app for finding a trusted mechanic nearby, with a map of shops and booking in a few taps.',
-      did: [],
-      links: [],
-      todo: 'confirm the description and add your part, tools and a link',
+      slug: 'find-my-mechanic', name: 'Find My Mechanic', year: '', kind: 'Mobile app',
+      img: 'media/mechanic.webp', tags: ['Mobile', 'Maps', 'UX'],
+      about: 'Helps drivers in urgent situations by connecting them with nearby, reliable mechanics. Beyond emergencies, it makes booking and scheduling repairs simple, so trusted help is a few taps away.',
+      did: [], links: [], todo: 'add the GitHub repo link',
     },
     {
-      slug: 'neuromedix', name: 'Neuromedix', year: '', kind: 'Hackathon · 2nd place',
-      tags: ['Hackathon', 'Health tech'],
-      about: 'A neuroscience hackathon project that placed second.',
-      did: [],
-      links: [],
-      todo: 'what it does and what you built',
-    },
-    {
-      slug: 'bbva', name: 'BBVA website', year: '', kind: 'Website · nonprofit',
-      tags: ['Webflow', 'UX'],
-      about: 'The website for the Black Business Ventures Association, built in Webflow so the team can update it themselves.',
-      did: [],
-      links: [],
-      todo: 'add the site link',
+      slug: 'neuromedix', name: 'Neuromedix', year: '', kind: 'Drug discovery · hackathon 2nd place',
+      img: 'media/neuromedix.webp', tags: ['Python', 'JavaScript', 'ML'],
+      about: 'Helps small pharmaceutical companies synthesize new drug candidates more efficiently.',
+      did: ['Used Python for model refinement', 'Built the JavaScript front end for a product designed to speed up drug discovery'],
+      links: [], note: 'private repository',
     },
   ];
 
   /* ------------------------------------------------------------------
-   * Hero: falling glyphs, with a few Yorùbá letters in the mix
+   * Hero: rain made of project names, falling letter by letter
    * ------------------------------------------------------------------ */
+  var WORDS = ['LAGOS LIFE', 'BESTIES', 'MYAREAA', 'TALENTTRACE', 'SNAPSHOT', 'INSTOCK', 'FIND MY MECHANIC', 'NEUROMEDIX', 'FAYO'];
+  var setRainBoost = function () {};
   (function rain() {
     var cv = $('#rain');
     if (!cv) return;
     var c = cv.getContext('2d');
-    var glyphs = '01ABCDEFGHIJKLMNOPQRSTUVWXYZẸỌṢẹọṣ<>/{}=;$#*+-ŃÀÉÌÒÙ'.split('');
-    var fs = 16, cols = 0, drops = [], w = 0, h = 0, dpr = 1, last = 0;
+    var fs = 16, cols = [], w = 0, h = 0, last = 0, boost = 0;
+    function pick() { return WORDS[(Math.random() * WORDS.length) | 0]; }
     function size() {
-      dpr = Math.min(2, window.devicePixelRatio || 1);
+      var dpr = Math.min(2, window.devicePixelRatio || 1);
       w = cv.clientWidth; h = cv.clientHeight;
+      if (!w || !h) return;
       cv.width = w * dpr; cv.height = h * dpr;
       c.setTransform(dpr, 0, 0, dpr, 0, 0);
-      cols = Math.ceil(w / fs);
-      drops = Array.from({ length: cols }, function () { return Math.random() * -h / fs; });
-      c.fillStyle = '#070a08'; c.fillRect(0, 0, w, h);
+      var n = Math.ceil(w / fs);
+      cols = Array.from({ length: n }, function () { return { y: Math.random() * -h / fs, word: pick(), i: 0, speed: 0.6 + Math.random() * 0.7 }; });
+      c.fillStyle = '#0b0f0c'; c.fillRect(0, 0, w, h);
     }
+    setRainBoost = function (v) { boost = v; };
     function frame(t) {
-      if (t - last > 55) {
+      if (t - last > 50) {
         last = t;
-        c.fillStyle = 'rgba(7,10,8,0.12)';
+        c.fillStyle = 'rgba(11,15,12,' + (boost ? 0.2 : 0.1) + ')';
         c.fillRect(0, 0, w, h);
         c.font = '500 ' + fs + "px 'JetBrains Mono', monospace";
-        for (var i = 0; i < cols; i++) {
-          var y = drops[i] * fs;
-          var ch = glyphs[(Math.random() * glyphs.length) | 0];
-          c.fillStyle = Math.random() < 0.04 ? '#d6ffe6' : (i % 3 ? '#1fae5c' : '#0f6b37');
-          c.fillText(ch, i * fs, y);
-          if (y > h && Math.random() > 0.975) drops[i] = 0;
-          drops[i] += 1;
+        for (var k = 0; k < cols.length; k++) {
+          var col = cols[k];
+          col.y += col.speed * (boost ? 2.2 : 1);
+          var row = Math.floor(col.y);
+          if (row !== col.row) {
+            col.row = row;
+            var ch = col.word[col.i % col.word.length];
+            col.i++;
+            if (ch !== ' ') {
+              // The head of each word is bright; the rest fades as it falls
+              c.fillStyle = col.i === 1 ? '#d6ffe6' : (k % 3 ? '#1fae5c' : '#0f6b37');
+              c.fillText(ch, k * fs, row * fs);
+            }
+            if (col.i >= col.word.length) { col.i = 0; col.word = pick(); col.y += 1.2; }
+          }
+          if (col.y * fs > h + 40 && Math.random() > 0.96) { col.y = -Math.random() * 10; col.i = 0; col.word = pick(); }
         }
       }
       if (!reduceMotion) requestAnimationFrame(frame);
     }
     size();
     window.addEventListener('resize', size);
-    if (reduceMotion) { for (var k = 0; k < 60; k++) frame(k * 60); } else requestAnimationFrame(frame);
+    if (reduceMotion) { for (var s = 0; s < 120; s++) frame(s * 60); } else requestAnimationFrame(frame);
   })();
 
-  /* Editor gutter line numbers, with the current line tracking the typed text */
+  /* ------------------------------------------------------------------
+   * Hero: the editor types its own source, compiles, then renders the name
+   * ------------------------------------------------------------------ */
+  var GUTTER_LINES = 60;
   (function gutter() {
     var g = $('#gutter');
-    if (!g) return;
     var html = '';
-    for (var i = 1; i <= 60; i++) html += '<li' + (i === 9 ? ' class="cur"' : '') + '></li>';
+    for (var i = 1; i <= GUTTER_LINES; i++) html += '<li></li>';
     g.innerHTML = html;
   })();
+  function setCursor(line, col) {
+    var lis = document.querySelectorAll('#gutter li');
+    lis.forEach(function (li, i) { li.classList.toggle('cur', i === line - 1); });
+    $('#stPos').textContent = 'Ln ' + line + ', Col ' + col;
+  }
 
-  /* Background code: real snippets from the work, drifting up the page */
-  (function bgcode() {
-    var far = $('#bgFar'), near = $('#bgNear');
-    if (!far || !near) return;
-    var src = [
-      'export function split(amount, owners) {',
-      '  const rows = owners.map((o) => {',
-      '    const exact = (amount * o.bps) / 10_000;',
-      '    return { id: o.id, exact, share: Math.floor(exact) };',
-      '  });',
-      '  let rem = amount - sum(rows.map((r) => r.share));',
-      '  rows.sort(byFraction).forEach((r) => { if (rem-- > 0) r.share++; });',
-      '  return rows;',
-      '}',
-      '',
-      'function sendChat(S, friendId, text) {',
-      '  if (f.lastChatDay !== S.day) {',
-      '    f.streak = f.lastChatDay === S.day - 1 ? f.streak + 1 : 1;',
-      '    addTrust(S, f.id, TRUST.dailyChat);',
-      '  }',
-      '}',
-      '',
-      'const snapshot = await addDoc(collection(db, "answers"), {',
-      '  userId, skillId, answer, createdAt: serverTimestamp(),',
-      '});',
-      '',
-      'return (',
-      '  <SelectedWorks>',
-      '    {works.map((w) => <Work key={w.slug} {...w} />)}',
-      '  </SelectedWorks>',
-      ');',
-      '',
-      'const progress = clamp01((serverNow() - ride.startedAt) / ride.durationMs);',
-      'socket.on("ride:event", (e) => applyRideEvent(ride, e));',
-      '',
-      'useEffect(() => { const id = requestAnimationFrame(tick); return () => cancelAnimationFrame(id); }, []);',
-      '',
-    ].join('\n');
-    var block = (src + '\n').repeat(4);
-    far.textContent = block + block;
-    near.textContent = block.split('\n').filter(function (_, i) { return i % 3 === 0; }).join('\n\n').repeat(2);
-  })();
+  // Each source line is a list of [class, text] tokens so it can be typed with highlighting
+  var SRC = [
+    [['k', 'import'], ['', ' { '], ['v', 'Name'], ['', ' } '], ['k', 'from'], ['', ' '], ['s', '"./fayo"'], ['', ';']],
+    [],
+    [['k', 'export default function'], ['', ' '], ['f', 'Hero'], ['', '() {']],
+    [['', '  '], ['k', 'return'], ['', ' '], ['t', '<Name'], ['', ' '], ['a', 'first'], ['', '='], ['s', '"Favour"'], ['', ' '], ['a', 'last'], ['', '='], ['s', '"Oyende"'], ['', ' '], ['t', '/>'], ['', ';']],
+    [['', '}']],
+  ];
+  function lineHTML(tokens, upto) {
+    var out = '', n = 0;
+    for (var i = 0; i < tokens.length; i++) {
+      var cls = tokens[i][0], txt = tokens[i][1];
+      if (upto !== undefined && n >= upto) break;
+      var take = upto === undefined ? txt : txt.slice(0, upto - n);
+      n += take.length;
+      out += cls ? '<span class="' + cls + '">' + esc(take) + '</span>' : esc(take);
+    }
+    return out;
+  }
+  function lineLen(tokens) { return tokens.reduce(function (s, t) { return s + t[1].length; }, 0); }
 
-  /* Typed role line */
+  var heroRun = 0;
+  function scramble(el, target, dur, done) {
+    var glyphs = 'LAGOSBESTIMYRNDCHXU#<>/{}';
+    var start = performance.now();
+    (function step(now) {
+      var p = Math.min(1, (now - start) / dur), out = '';
+      for (var i = 0; i < target.length; i++) {
+        out += p * target.length > i + 0.6 ? target[i] : glyphs[(Math.random() * glyphs.length) | 0];
+      }
+      el.textContent = out;
+      if (p < 1) requestAnimationFrame(step); else if (done) done();
+    })(start);
+  }
+  function playHero() {
+    var run = ++heroRun;
+    var src = $('#src'), inner = $('#heroInner'), state = $('#stState');
+    var lines = SRC.map(function () { return ''; });
+    function paint(active) {
+      src.innerHTML = SRC.map(function (_, i) { return '<span class="ln' + (i === active ? ' on' : '') + '">' + (lines[i] || ' ') + '</span>'; }).join('\n');
+    }
+    if (reduceMotion) {
+      SRC.forEach(function (t, i) { lines[i] = lineHTML(t); });
+      paint(-1); inner.className = 'hero-inner built'; setCursor(SRC.length, 2);
+      return;
+    }
+    inner.className = 'hero-inner typing';
+    state.textContent = '● typing';
+    $('#n1').textContent = ''; $('#n2').textContent = '';
+    var li = 0, ci = 0;
+    paint(0);
+    (function type() {
+      if (run !== heroRun) return;
+      if (li >= SRC.length) return compile();
+      var tok = SRC[li], len = lineLen(tok);
+      if (ci <= len) {
+        lines[li] = lineHTML(tok, ci);
+        paint(li);
+        setCursor(li + 1, ci + 1);
+        ci++;
+        return setTimeout(type, len ? 14 + Math.random() * 22 : 50);
+      }
+      li++; ci = 0;
+      setTimeout(type, 110);
+    })();
+    function compile() {
+      state.textContent = '⟳ compiling…';
+      setRainBoost(1);
+      setTimeout(function () {
+        if (run !== heroRun) return;
+        state.textContent = '✓ compiled in 0.42s';
+        setRainBoost(0);
+        inner.className = 'hero-inner rendering';
+        scramble($('#n1'), 'OYENDE', 700);
+        setTimeout(function () {
+          scramble($('#n2'), 'FAVOUR', 700, function () {
+            if (run !== heroRun) return;
+            inner.className = 'hero-inner built';
+            setCursor(SRC.length, 2);
+          });
+        }, 200);
+      }, 650);
+    }
+  }
+  playHero();
+  $('#replay').addEventListener('click', playHero);
+
+  /* Typed role line, after the hero is built */
   (function typed() {
     var el = $('#typed');
     if (!el || reduceMotion) return;
-    var lines = ['frontend developer & ux designer', 'i build things people come back to', 'react · typescript · react native', 'game loops, streaks, dashboards'];
+    var lines = ['full-stack developer · react, typescript, python', 'i build things people come back to', 'frontend + backend model refinement', 'currently: full-stack @ myareaa'];
     var li = 0, ci = lines[0].length, dir = -1;
     function step() {
-      var s = lines[li];
       ci += dir;
-      el.textContent = s.slice(0, ci);
+      el.textContent = lines[li].slice(0, ci);
       if (dir < 0 && ci <= 0) { dir = 1; li = (li + 1) % lines.length; }
-      else if (dir > 0 && ci >= lines[li].length) { dir = -1; return setTimeout(step, 2200); }
-      setTimeout(step, dir > 0 ? 55 : 25);
+      else if (dir > 0 && ci >= lines[li].length) { dir = -1; return setTimeout(step, 2400); }
+      setTimeout(step, dir > 0 ? 50 : 22);
     }
-    setTimeout(step, 2600);
+    setTimeout(step, 5200);
+  })();
+
+  /* ------------------------------------------------------------------
+   * Favour's code snippets: shown in their own section and drifting behind the page
+   * ------------------------------------------------------------------ */
+  var SNIPPETS = [
+    {
+      file: 'TextField.jsx', from: 6, note: 'InStock · reusable form field with validation',
+      code: String.raw`function TextField({
+  label,
+  name,
+  placeholder,
+  value,
+  onChange,
+  hasError,
+  id,
+  validationType,
+}) {
+  const isEmpty = value.trim() === "";
+
+  const inputClasses = classNames("text-field", {
+    "text-field--error": hasError && isEmpty,
+  });
+
+
+  function formatPhoneNumber(phoneNumber) {
+    const phonePattern = /^\+(\d{1,2})\s?\((\d{3})\)\s?(\d{3})-(\d{4})$/;
+
+    return phonePattern.test(phoneNumber);
+  }
+
+  const validate = () => {
+    switch (validationType) {
+      case "phone":
+        return formatPhoneNumber(value);
+      case "email":
+        return value.includes("@");
+      default:
+        return !isEmpty;
+    }
+  };
+
+  const isValid = validate();
+
+  return (
+    <div className="form-group">`,
+    },
+    {
+      file: 'Question.jsx', from: 57, note: 'TalentTrace · upload an image to Firebase from a question card',
+      code: String.raw`  //handler for image change
+  const handleImageChange = (e) => {
+    setImageUrl(e.target.value);
+    onImageChange(questionData.questionId, e.target.value);
+  };
+
+  const handleUploadImage = async () => {
+    if (!imageUrl?.trim()) {
+      alert('Please provide an image URL');
+      return;
+    }
+
+    try {
+      await updateImageUrls(
+        questionData.questionId,
+        questionData.skillId,
+        imageUrl
+      );
+      console.log('Image uploaded successfully!');
+      setUploadedImageUrl(imageUrl);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+  };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p className="text-red-500">{error}</p>;
+
+  return (
+    <Card className="flex flex-col p-[33px] px-[64px] mb-16 gap-[10px] border border-[#003660] bg-white shadow-md">
+      <CardHeader>
+        <CardDescription
+          className="text-[#003660] font-montserrat text-[16px] font-normal leading-[24px] pb-4"
+          style={{
+            color: 'var(--Blue-Blue12, #003660)',
+            fontFeatureSettings: "'liga' off, 'clig' off",
+          }}
+        >
+          {' '}
+          Question {questionNumber} - {questionData.skillName} (
+          {questionData.categoryName})
+        </CardDescription>`,
+    },
+  ];
+
+  // A small JSX highlighter: comments, strings, regex, tags, keywords, functions, numbers
+  var KW = /^(function|const|let|var|return|if|else|switch|case|default|try|catch|await|async|export|import|from|new)$/;
+  function highlight(line) {
+    var re = /(\/\/.*$)|("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')|(\/\^.*\$\/)|(<\/?[A-Za-z][\w.]*|\/?>)|([A-Za-z_$][\w$]*)(?=\s*\()|([A-Za-z_$][\w$]*)|(\d+)/g;
+    var out = '', last = 0, m;
+    while ((m = re.exec(line))) {
+      out += esc(line.slice(last, m.index));
+      var t = esc(m[0]);
+      if (m[1]) out += '<span class="cm">' + t + '</span>';
+      else if (m[2]) out += '<span class="st">' + t + '</span>';
+      else if (m[3]) out += '<span class="rx">' + t + '</span>';
+      else if (m[4]) out += '<span class="tg">' + t + '</span>';
+      else if (m[5]) out += KW.test(m[5]) ? '<span class="kw">' + t + '</span>' : '<span class="fn">' + t + '</span>';
+      else if (m[6]) out += KW.test(m[6]) ? '<span class="kw">' + t + '</span>' : t;
+      else if (m[7]) out += '<span class="nu">' + t + '</span>';
+      last = re.lastIndex;
+    }
+    return out + esc(line.slice(last));
+  }
+  (function snippets() {
+    var tabs = $('#snipTabs'), body = $('#snipBody'), status = $('#snipStatus');
+    function show(i) {
+      var s = SNIPPETS[i];
+      tabs.querySelectorAll('button').forEach(function (b, k) { b.classList.toggle('on', k === i); b.setAttribute('aria-selected', k === i); });
+      body.innerHTML = '<ol class="code-lines" start="' + s.from + '">' + s.code.split('\n').map(function (l) { return '<li>' + (highlight(l) || ' ') + '</li>'; }).join('') + '</ol>';
+      body.style.setProperty('--start', s.from - 1);
+      status.innerHTML = '<span>' + esc(s.note) + '</span><span>' + s.code.split('\n').length + ' lines · JavaScript React</span>';
+    }
+    SNIPPETS.forEach(function (s, i) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'tab'; b.setAttribute('role', 'tab'); b.textContent = s.file;
+      b.addEventListener('click', function () { show(i); });
+      tabs.appendChild(b);
+    });
+    show(0);
+  })();
+
+  /* Background code: Favour's snippets drifting up the page */
+  (function bgcode() {
+    var far = $('#bgFar'), near = $('#bgNear');
+    var src = SNIPPETS.map(function (s) { return s.code; }).join('\n\n');
+    var block = (src + '\n\n').repeat(2);
+    far.textContent = block + block;
+    near.textContent = block.split('\n').filter(function (_, i) { return i % 3 === 0; }).join('\n\n').repeat(2);
   })();
 
   /* ------------------------------------------------------------------
@@ -180,7 +374,7 @@
       ind(1) + '<span class="t"><span class="kw">return</span> (</span>',
       ind(2) + '<span class="t"><span class="tg">&lt;SelectedWorks&gt;</span></span>',
     ];
-    WORKS.forEach(function (w, i) {
+    WORKS.forEach(function (w) {
       rows.push(ind(3, true) + '<button class="work" type="button" data-slug="' + w.slug + '"><span class="t"><span class="tg">&lt;Work</span> <span class="at">name</span>=<span class="st">"' + w.name + '"</span>' + (w.year ? ' <span class="at">year</span>=<span class="st">"' + w.year + '"</span>' : '') + ' <span class="tg">/&gt;</span></span><span class="go">open ↵</span></button>');
     });
     rows.push(ind(2) + '<span class="t"><span class="tg">&lt;/SelectedWorks&gt;</span></span>');
@@ -211,18 +405,17 @@
   cube.innerHTML = WORKS.map(function (w, i) {
     return '<div class="face" data-slug="' + w.slug + '" style="transform:' + FACES[i].tf + ' translateZ(calc(var(--cube) / 2))">' +
       '<div class="term-bar"><i></i><i></i><i></i><span>~/works/' + w.slug + '</span></div>' +
-      '<div class="face-body"><span class="k">// ' + (i + 1).toString().padStart(2, '0') + '</span><h3>' + w.name + '</h3>' +
+      '<div class="shot"><img src="' + w.img + '" alt="" loading="lazy" draggable="false"></div>' +
+      '<div class="face-body"><span class="k">// ' + String(i + 1).padStart(2, '0') + '</span><h3>' + w.name + '</h3>' +
       '<span class="meta">' + w.kind + (w.year ? ' · ' + w.year : '') + '</span>' +
-      '<div class="tags">' + w.tags.map(function (t) { return '<span>' + t + '</span>'; }).join('') + '</div>' +
       '<span class="run">$ <b>open ' + w.slug + '</b></span></div></div>';
   }).join('');
 
-  var rot = { x: -18, y: 28 }, target = null, auto = !reduceMotion, idleAt = 0;
+  var rot = { x: -18, y: 28 }, target = null, auto = !reduceMotion, idleAt = 0, dragging = false;
   function applyRot() { cube.style.transform = 'rotateX(' + rot.x + 'deg) rotateY(' + rot.y + 'deg)'; }
   function nearest(a, b) { var d = ((b - a) % 360 + 540) % 360 - 180; return a + d; }
   function showFace(i) {
     var f = FACES[i];
-    // Tilt a little off-axis so it still reads as a cube
     target = { x: nearest(rot.x, f.rx - 8), y: nearest(rot.y, f.ry + 12) };
     auto = false; idleAt = performance.now() + 9000;
     cube.querySelectorAll('.face').forEach(function (el, k) { el.classList.toggle('on', k === i); });
@@ -245,7 +438,7 @@
     if (!reduceMotion) requestAnimationFrame(tick);
   })();
 
-  var dragging = false, start = null, moved = false;
+  var start = null, moved = false;
   var stage = $('#stage');
   stage.addEventListener('pointerdown', function (e) { dragging = true; moved = false; start = { x: e.clientX, y: e.clientY, rx: rot.x, ry: rot.y }; target = null; auto = false; stage.setPointerCapture(e.pointerId); });
   stage.addEventListener('pointermove', function (e) {
@@ -268,7 +461,6 @@
    * The CLI
    * ------------------------------------------------------------------ */
   var out = $('#out'), input = $('#cmd'), history = [], hi = 0;
-  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function print(html, cls) { var p = document.createElement('p'); if (cls) p.className = cls; p.innerHTML = html; out.appendChild(p); out.scrollTop = out.scrollHeight; return p; }
   function blank() { print(''); }
   function findWork(q) {
@@ -281,7 +473,7 @@
 
   var COMMANDS = {
     help: function () {
-      [['ls', 'list the work'], ['open <name|#>', 'open a project (spins the cube)'], ['run lagos-life', 'play the Lagos Life demo'], ['whoami', 'who built this'], ['skills', 'what I work with'], ['contact', 'how to reach me'], ['clear', 'clear the screen']]
+      [['ls', 'list the work'], ['open <name|#>', 'open a project (spins the cube)'], ['run lagos-life', 'play the Lagos Life demo'], ['cat snippets', 'jump to my code'], ['whoami', 'who built this'], ['skills', 'what I work with'], ['contact', 'how to reach me'], ['clear', 'clear the screen']]
         .forEach(function (r) { print('  <span class="ok">' + esc(r[0]).padEnd(16, ' ') + '</span><span class="dim">' + r[1] + '</span>'); });
       print('  <span class="dim">tip: tab completes names, ↑ ↓ go through history</span>');
     },
@@ -291,11 +483,13 @@
       });
     },
     open: function (arg) {
+      if (/^snippets?$/i.test(arg || '')) { document.getElementById('snippets').scrollIntoView({ behavior: 'smooth' }); print('<span class="dim">opening ./snippets…</span>'); return; }
       var w = findWork(arg);
       if (!w) { print('open: no such work: ' + esc(arg || '') + ' <span class="dim">(try ls)</span>', 'warn'); return; }
       showFace(WORKS.indexOf(w));
       document.querySelectorAll('#tree button.work').forEach(function (b) { b.classList.toggle('on', b.dataset.slug === w.slug); });
       print('<span class="ok">▸ ' + esc(w.name) + '</span>  <span class="dim">' + esc(w.kind) + (w.year ? ' · ' + w.year : '') + '</span>');
+      print('<img class="thumb" src="' + w.img + '" alt="Screenshot of ' + esc(w.name) + '">');
       if (w.about) print('  ' + esc(w.about));
       if (w.did.length) { print('  <span class="key">built:</span>'); w.did.forEach(function (d) { print('   - ' + esc(d)); }); }
       print('  <span class="key">stack:</span> ' + w.tags.map(esc).join(', '));
@@ -304,10 +498,9 @@
         if (w.demo) p.insertAdjacentHTML('beforeend', '<button class="inline" type="button" data-run="run ' + w.slug + '">▶ play demo</button>');
         w.links.forEach(function (l) { p.insertAdjacentHTML('beforeend', ' <a href="' + l[1] + '" target="_blank" rel="noopener">' + l[0] + ' ↗</a> '); });
       }
+      if (w.note) print('  <span class="dim">' + esc(w.note) + '</span>');
       if (w.todo) print('  <span class="warn"># todo: ' + esc(w.todo) + '</span>');
     },
-    cd: function (arg) { COMMANDS.open(arg); },
-    cat: function (arg) { COMMANDS.open(arg); },
     run: function (arg) {
       var w = findWork(arg || 'lagos-life');
       if (!w || !w.demo) { print('run: ' + esc(arg || '') + ' has no live demo here. Try <span class="ok">run lagos-life</span>', 'warn'); return; }
@@ -316,21 +509,20 @@
     },
     whoami: function () {
       print('<span class="ok">Oyende Favour</span> <span class="dim">(Fayo)</span>');
-      print('  frontend developer &amp; ux designer · Calgary, AB · born in Nigeria');
-      print('  background in frontend, UX and talent recruiting');
+      print('  full-stack developer · Calgary, AB · born in Nigeria');
+      print('  frontend development + backend model refinement');
       print('  <a href="#about">more in ./about</a>');
     },
     skills: function () {
-      print('  <span class="key">build</span>   React, React Native, TypeScript, JavaScript, Vite, Canvas');
-      print('  <span class="key">style</span>   Tailwind, Sass, CSS');
-      print('  <span class="key">ship</span>    Firebase, GitHub Actions, testing, Webflow');
-      print('  <span class="key">design</span>  UX design, user flows');
-      print('  <span class="key">work</span>    AI orchestration, finance dashboards');
+      print('  <span class="key">code</span>    TypeScript, JavaScript, React, React Native, Python, Java, SQL');
+      print('  <span class="key">data</span>    Firebase, graph databases');
+      print('  <span class="key">mobile</span>  React Native, Expo');
+      print('  <span class="key">design</span>  UI design, UX design, UX research, prototyping, animation');
     },
     contact: function () {
-      print('  <span class="key">github</span>    <a href="https://github.com/Fayo08" target="_blank" rel="noopener">github.com/Fayo08</a>');
-      print('  <span class="warn"># todo: email and linkedin</span>');
-      print('  <a href="#contact">jump to ./contact</a>');
+      print('  <span class="key">email</span>    <a href="mailto:oyendefavour12@gmail.com">oyendefavour12@gmail.com</a>');
+      print('  <span class="key">behance</span>  <a href="https://www.behance.net/oyendefavour" target="_blank" rel="noopener">behance.net/oyendefavour</a>');
+      print('  <span class="key">github</span>   <a href="https://github.com/Fayo08" target="_blank" rel="noopener">github.com/Fayo08</a>');
     },
     clear: function () { out.innerHTML = ''; },
     sudo: function (arg) {
@@ -338,6 +530,7 @@
       else print('nice try. only <span class="ok">sudo hire favour</span> works here.', 'warn');
     },
   };
+  COMMANDS.cd = COMMANDS.open; COMMANDS.cat = COMMANDS.open;
   COMMANDS.works = COMMANDS.ls; COMMANDS.dir = COMMANDS.ls; COMMANDS.about = COMMANDS.whoami;
 
   function run(line) {
@@ -375,7 +568,7 @@
     chips.appendChild(b);
   });
 
-  /* Boot: print a banner and open the featured work when the section first comes into view */
+  /* Boot: banner, then `ls` and the featured work when the section first comes into view */
   print('<span class="ascii"> ┌─┐┬ ┬┌─┐┌┐┌┌┬┐┌─┐  ┌─┐┌─┐┬  ┬┌─┐┬ ┬┬─┐\n │ │└┬┘├┤ │││ ││├┤   ├┤ ├─┤└┐┌┘│ ││ │├┬┘\n └─┘ ┴ └─┘┘└┘─┴┘└─┘  └  ┴ ┴ └┘ └─┘└─┘┴└─</span>');
   print('<span class="dim">portfolio v2026 · type</span> <span class="ok">help</span> <span class="dim">or tap a command below</span>');
   blank();

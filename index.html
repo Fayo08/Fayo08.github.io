@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Oyende Favour · Frontend &amp; UX</title>
-  <meta name="description" content="Favour Oyende is a frontend developer and UX designer in Calgary. Browse her work from a 3D cube and a working command line.">
-  <meta property="og:title" content="Oyende Favour · Frontend & UX">
-  <meta property="og:description" content="Frontend developer and UX designer. Type `ls` to see the work.">
+  <title>Oyende Favour · Developer</title>
+  <meta name="description" content="Favour Oyende is a full-stack developer in Calgary building efficient, user-centric apps in React, TypeScript and Python. Browse her work from a 3D cube and a working command line.">
+  <meta property="og:title" content="Oyende Favour · Developer">
+  <meta property="og:description" content="Full-stack developer. Type `ls` to see the work.">
   <meta property="og:type" content="website">
+  <meta property="og:image" content="media/lagos-ride.webp">
   <meta name="theme-color" content="#070a08">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,37 +21,42 @@
     <nav aria-label="Sections">
       <a href="#works">works</a>
       <a href="#about">about</a>
+      <a href="#snippets">code</a>
       <a href="#contact">contact</a>
     </nav>
   </header>
 
   <main>
-    <!-- Hero: falling code with the name set like a terminal banner -->
+    <!-- Hero: an editor that types its own source, then renders Favour's name -->
     <section class="hero" aria-labelledby="name">
       <div class="ide">
         <div class="ide-bar">
           <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
           <span class="ide-tab on">(IF FAYO)</span>
-          <span class="ide-tab" aria-hidden="true">index.jsx</span>
+          <span class="ide-tab" aria-hidden="true">Hero.jsx</span>
           <span class="ide-title" aria-hidden="true">oyende-favour</span>
         </div>
         <div class="ide-body">
           <ol class="gutter" id="gutter" aria-hidden="true"></ol>
           <div class="ide-view">
             <canvas id="rain" aria-hidden="true"></canvas>
-            <div class="hero-inner">
-              <h1 id="name"><span>OYENDE</span><span>FAVOUR</span></h1>
-              <p class="typed"><span class="prompt">&gt;</span> <span id="typed">frontend developer &amp; ux designer</span><span class="cursor" aria-hidden="true">_</span></p>
-              <p class="comment">// born in Nigeria, building in Calgary. I make things people come back to.</p>
-              <div class="hero-actions">
-                <a class="btn" href="#works">$ ls works</a>
-                <a class="btn ghost" href="#contact">$ contact</a>
+            <div class="hero-inner" id="heroInner">
+              <pre class="src" id="src" aria-hidden="true"></pre>
+              <h1 id="name" aria-label="Oyende Favour"><span id="n1">OYENDE</span><span id="n2">FAVOUR</span></h1>
+              <div class="after">
+                <p class="typed"><span class="prompt">&gt;</span> <span id="typed">full-stack developer · react, typescript, python</span><span class="cursor" aria-hidden="true">_</span></p>
+                <p class="comment">// building efficient, user-centric apps from Calgary. born in Nigeria.</p>
+                <div class="hero-actions">
+                  <a class="btn" href="#works">$ ls works</a>
+                  <a class="btn ghost" href="#contact">$ contact</a>
+                  <button class="replay" id="replay" type="button">↻ re-run</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
         <div class="ide-status" aria-hidden="true">
-          <span class="br">⎇ main</span><span>⊘ 0 errors</span><span class="sp"></span><span>Ln 1, Col 1</span><span>UTF-8</span><span>JavaScript React</span>
+          <span class="br">⎇ main</span><span id="stState">⊘ 0 errors</span><span class="sp"></span><span id="stPos">Ln 1, Col 1</span><span>UTF-8</span><span>JavaScript React</span>
         </div>
       </div>
       <a class="down" href="#selected" aria-label="Scroll to selected works">scroll ↓</a>
@@ -104,33 +110,47 @@
       </div>
     </section>
 
-    <!-- About as a code object -->
+    <!-- About: photo as an image preview, bio as a code object -->
     <section class="about" id="about" aria-labelledby="about-title">
       <div class="sect-head"><h2 id="about-title"><span class="g">&lt;</span>About<span class="g"> /&gt;</span></h2></div>
       <div class="about-grid">
-        <div class="editor small">
+        <figure class="editor portrait">
+          <div class="tabs" aria-hidden="true"><span class="tab on">favour.webp</span></div>
+          <img src="media/favour.webp" alt="Portrait of Favour Oyende" width="600" height="550" loading="lazy">
+          <figcaption>600 × 550 · <span class="g">hi, I'm Favour</span></figcaption>
+        </figure>
+        <div class="about-copy">
+          <p>Hi, my name is Favour. I'm an impact-oriented developer skilled in JavaScript, TypeScript, React, Python and modern web technologies, dedicated to building efficient, user-centric applications.</p>
+          <p>With a strong foundation in both frontend development and backend model refinement, I thrive on solving complex problems and delivering impactful digital solutions.</p>
+        </div>
+        <div class="editor small about-obj">
           <div class="tabs" aria-hidden="true"><span class="tab on">favour.ts</span></div>
-          <pre class="obj" aria-label="About Favour, written as a code object"><span class="k">const</span> <span class="v">favour</span> = {
-  <span class="p">role</span>: <span class="s">"Frontend developer &amp; UX designer"</span>,
+          <pre class="obj" aria-label="Favour's skills and experience, written as a code object"><span class="k">const</span> <span class="v">favour</span> = {
+  <span class="p">skills</span>: [<span class="s">"TypeScript"</span>, <span class="s">"React Native"</span>, <span class="s">"JavaScript"</span>, <span class="s">"Python"</span>,
+           <span class="s">"Java"</span>, <span class="s">"SQL"</span>, <span class="s">"Firebase"</span>, <span class="s">"Graph databases"</span>, <span class="s">"Expo"</span>],
+  <span class="p">design</span>: [<span class="s">"UI design"</span>, <span class="s">"UX design"</span>, <span class="s">"UX research"</span>, <span class="s">"Prototyping"</span>, <span class="s">"Animation"</span>],
+  <span class="p">experience</span>: [
+    { <span class="p">role</span>: <span class="s">"Full-stack Developer"</span>, <span class="p">at</span>: <span class="s">"MyAreaa"</span>,  <span class="p">since</span>: <span class="s">"Jan 2026"</span> },
+    { <span class="p">role</span>: <span class="s">"Software Developer"</span>,   <span class="p">at</span>: <span class="s">"MakeItMVP"</span>, <span class="p">since</span>: <span class="s">"Mar 2025"</span> },
+    { <span class="p">role</span>: <span class="s">"Web Developer"</span>,        <span class="p">at</span>: <span class="s">"BBVA"</span>,      <span class="p">since</span>: <span class="s">"Apr 2024"</span> },
+  ],
   <span class="p">based</span>: <span class="s">"Calgary, AB"</span>, <span class="c">// born in Nigeria</span>
   <span class="p">speaks</span>: [<span class="s">"English"</span>, <span class="s">"Yorùbá"</span>, <span class="s">"Français (un peu)"</span>],
-  <span class="p">background</span>: [<span class="s">"frontend"</span>, <span class="s">"ux design"</span>, <span class="s">"talent recruiting"</span>],
-  <span class="p">now</span>: {
-    <span class="p">MyAreaa</span>: <span class="s">"software developer · AI orchestration, finance dashboards"</span>,
-    <span class="p">PathsToPlace</span>: <span class="s">"contract developer"</span>,
-    <span class="p">CuratorKollective</span>: <span class="s">"co-founder · events, Calgary"</span>,
-  },
-  <span class="p">stack</span>: [<span class="s">"React"</span>, <span class="s">"React Native"</span>, <span class="s">"TypeScript"</span>, <span class="s">"Firebase"</span>,
-          <span class="s">"Tailwind"</span>, <span class="s">"Canvas"</span>, <span class="s">"GitHub Actions"</span>, <span class="s">"Webflow"</span>],
-  <span class="p">likes</span>: <span class="s">"streaks, game loops and dashboards you read in one look"</span>,
-};
+};</pre>
+        </div>
+      </div>
+    </section>
 
-<span class="k">export default</span> <span class="v">favour</span>;</pre>
-        </div>
-        <div class="about-copy">
-          <p>My background spans frontend development, UX design and talent recruiting, so I think about the person on the other side of the screen before I write a line of code.</p>
-          <p>I like building things people choose to open again: game mechanics, streaks and rewards, and dashboards that answer a question at a glance. At MyAreaa I build AI orchestration layers and finance dashboards. On the side I co-run Curator Kollective, an events company in Calgary.</p>
-        </div>
+    <!-- Code snippets, in an editor with a tab per file -->
+    <section class="snippets" id="snippets" aria-labelledby="snip-title">
+      <div class="sect-head">
+        <h2 id="snip-title"><span class="g">&lt;</span>CodeSnippets<span class="g"> /&gt;</span></h2>
+        <p class="comment">// real code from my projects</p>
+      </div>
+      <div class="editor snip">
+        <div class="tabs" role="tablist" aria-label="Code files" id="snipTabs"></div>
+        <div class="snip-body" id="snipBody" role="tabpanel"></div>
+        <div class="snip-status" id="snipStatus"></div>
       </div>
     </section>
 
@@ -142,8 +162,9 @@
           <p class="line"><span class="g">$</span> contact --favour</p>
           <h2 id="contact-title">Let's build something people come back to.</h2>
           <ul class="contact-list">
-            <li><span class="key">email</span><a class="todo" href="mailto:you@example.com">your@email.com</a></li>
-            <li><span class="key">linkedin</span><a class="todo" href="#">linkedin.com/in/your-handle</a></li>
+            <li><span class="key">email</span><a href="mailto:oyendefavour12@gmail.com">oyendefavour12@gmail.com</a></li>
+            <li><span class="key">phone</span><a href="tel:+18259655401">825-965-5401</a></li>
+            <li><span class="key">behance</span><a href="https://www.behance.net/oyendefavour" target="_blank" rel="noopener">behance.net/oyendefavour</a></li>
             <li><span class="key">github</span><a href="https://github.com/Fayo08" target="_blank" rel="noopener">github.com/Fayo08</a></li>
           </ul>
           <p class="line"><span class="g">$</span> <span class="cursor">_</span></p>
