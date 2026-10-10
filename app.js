@@ -37,14 +37,14 @@
       img: 'media/instock.webp', tags: ['React', 'Express', 'MySQL', 'Knex'],
       about: 'Inventory management for warehouses. Users can add, edit and delete warehouses and the managers in charge of them, view each warehouse’s inventory, edit item details and create new items.',
       did: ['Built with React and an Express + MySQL API (Knex migrations and seeds)', 'Full CRUD for warehouses and inventory, with form validation'],
-      links: [['live', 'https://fayo08.github.io/InStock-client/'], ['client', 'https://github.com/Fayo08/InStock-client'], ['server', 'https://github.com/Fayo08/inStock-server']],
+      links: [['client', 'https://github.com/Fayo08/InStock-client'], ['server', 'https://github.com/Fayo08/inStock-server']],
     },
     {
       slug: 'find-my-mechanic', name: 'Find My Mechanic', year: '2024', kind: 'Mobile-first web app',
       img: 'media/mechanic.webp', tags: ['React', 'Express', 'MySQL', 'Maps'],
       about: 'Helps drivers in urgent situations by connecting them with nearby, reliable mechanics. Beyond emergencies, it makes booking and scheduling repairs simple, so trusted help is a few taps away.',
       did: ['React front end with Google Maps, booking and reviews', 'Express + MySQL API for mechanics, services and reviews'],
-      links: [['live', 'https://fayo08.github.io/Find-my-mechanic/'], ['client', 'https://github.com/Fayo08/Find-my-mechanic'], ['server', 'https://github.com/Fayo08/Find-my-mechanic-Backend']],
+      links: [['client', 'https://github.com/Fayo08/Find-my-mechanic'], ['server', 'https://github.com/Fayo08/Find-my-mechanic-Backend']],
     },
     {
       slug: 'neuromedix', name: 'Neuromedix', year: '', kind: 'Drug discovery · hackathon 2nd place',
