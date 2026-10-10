@@ -215,7 +215,7 @@
   (function typed() {
     var el = $('#typed');
     if (!el || reduceMotion) return;
-    var lines = ['full-stack developer · react, typescript, python', 'i build things people come back to', 'frontend + backend model refinement', 'currently: full-stack @ myareaa'];
+    var lines = ['full-stack developer · react, typescript, python', "designer's eye, engineer's hands", 'frontend + backend model refinement', 'currently: full-stack @ myareaa'];
     var li = 0, ci = lines[0].length, dir = -1;
     function step() {
       ci += dir;
