@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Favour Oyende · Frontend & UX</title>
+  <meta name="description" content="Favour Oyende is a frontend developer and UX designer in Calgary. She designs and builds products people come back to, from game features to finance dashboards.">
+  <meta property="og:title" content="Favour Oyende · Frontend & UX">
+  <meta property="og:description" content="Frontend developer and UX designer. Play her Lagos Life feature concept right on the page.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <a class="mark" href="#top">favour<span>.</span>oyende</a>
+      <nav aria-label="Sections">
+        <a href="#featured">Work</a>
+        <a href="#about">About</a>
+        <a class="cta-mini" href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero wrap">
+      <div class="label"><span>Frontend developer</span><i>·</i><span>UX designer</span><i>·</i><span>Calgary, AB</span></div>
+      <h1>Favour <span class="surname">Oyende</span></h1>
+      <p class="lede">I design and build products people <em>come back to</em>, from game features to finance dashboards.</p>
+      <div class="actions">
+        <a class="btn primary" href="#featured">Play my Lagos Life concept ↓</a>
+        <a class="btn ghost" href="#contact">Get in touch</a>
+      </div>
+      <div class="streakline" aria-label="Highlights">
+        <span><b>React · TypeScript · React Native</b></span>
+        <span>AI orchestration &amp; fintech dashboards</span>
+        <span>🥈 Neuromedix hackathon</span>
+        <span>English · Yorùbá · Français</span>
+      </div>
+    </section>
+
+    <section class="featured wrap" id="featured">
+      <div class="sect-head"><h2>Featured</h2><span class="label">Playable below</span></div>
+      <div class="case">
+        <div class="case-story case-top">
+          <div class="meta"><span class="chip">Feature concept</span><span class="chip">Game design</span><span class="chip">2026</span></div>
+          <h3>Lagos Life: <span>Besties</span></h3>
+          <p class="intro">Lagos Life already has friends, chats, companies and rides across the city. I designed and built a feature that ties them together and gives players a reason to come back every day.</p>
+        </div>
+        <div class="case-story case-rest">
+          <ul class="built">
+            <li><span class="ic">🔥</span><div><b>Chat streaks unlock a business</b><span>Message a friend three days in a row and you can start a company together, owned by what each of you puts in.</span></div></li>
+            <li><span class="ic">🚗</span><div><b>Ride through Lagos together</b><span>Keke, danfo, okada or a friend's car. A canvas-drawn drive with three camera views, a radio, and a go-slow on Third Mainland where you can buy gala from a hawker.</span></div></li>
+            <li><span class="ic">🪩</span><div><b>Land at real spots</b><span>i-Fitness, Quilox, Balogun Market and more, drawn as rooms where you and your friend stand together among other players.</span></div></li>
+            <li><span class="ic">🤝</span><div><b>Trust you earn, not buy</b><span>Chats, rides and activities together build trust, which unlocks perks like splitting the cab.</span></div></li>
+            <li><span class="ic">🌗</span><div><b>Day and night</b><span>The whole world follows the in-game clock, and midnight starts a new day for streaks.</span></div></li>
+          </ul>
+          <div class="eng">
+            <span class="label">Under the hood</span>
+            <ul>
+              <li><b>TypeScript and Vite</b>, no framework. Game rules are pure functions, separate from the UI.</li>
+              <li><b>36 tests</b> on the rules: streaks, trust, fares, voting, ownership.</li>
+              <li><b>Exact money.</b> Ownership is in basis points and profit splits use the largest-remainder method, so no naira is ever lost to rounding.</li>
+              <li><b>CI/CD</b> with GitHub Actions: every push is tested, type-checked, built and deployed.</li>
+            </ul>
+          </div>
+          <div class="links">
+            <a href="https://fayo08.github.io/LagosLifeBestieDemo/" target="_blank" rel="noopener">Play full screen ↗</a>
+            <a href="https://github.com/Fayo08/LagosLifeBestieDemo" target="_blank" rel="noopener">Read the code ↗</a>
+          </div>
+        </div>
+        <div class="case-demo">
+          <iframe src="https://fayo08.github.io/LagosLifeBestieDemo/?embed" title="Lagos Life Besties, playable demo" loading="lazy"></iframe>
+          <p class="hint">It's live. Open @tolu in Messages and start a company.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="work wrap" id="work">
+      <div class="sect-head"><h2>More work</h2><span class="label">Team, client &amp; hackathon</span></div>
+      <div class="grid">
+        <article class="project">
+          <div class="kicker"><span class="label">Team project · Communiti</span><span class="badge">Shipped</span></div>
+          <h3>Snapshot (TalentTrace)</h3>
+          <p>Turns a new grad's skills into a polished one-page snapshot in under five minutes, shareable as a link, PDF or image, so recruiters can see what a candidate can do.</p>
+          <p class="mine"><b>My part:</b> the landing hero and saving users' answers to Firebase.</p>
+          <div class="links"><a href="https://github.com/Fayo08/TalentTrace" target="_blank" rel="noopener">Code ↗</a><a href="#" class="todo">Live site ↗</a></div>
+          <div class="stack"><span class="badge">React</span><span class="badge">Vite</span><span class="badge">Tailwind</span><span class="badge">Firebase</span></div>
+        </article>
+
+        <article class="project">
+          <div class="kicker"><span class="label">Client work · MyAreaa</span><span class="badge">In production</span></div>
+          <h3>AI orchestration &amp; finance dashboards</h3>
+          <p>At MyAreaa, a technical consulting firm, I build AI orchestration layers and dashboards that make financial data readable at a glance.</p>
+          <p class="mine"><i class="todo">One line on a result you're proud of, e.g. what it replaced or who uses it.</i></p>
+          <div class="stack"><span class="badge">AI orchestration</span><span class="badge">Dashboards</span><span class="badge">Fintech</span></div>
+        </article>
+
+        <article class="project">
+          <div class="kicker"><span class="label">Hackathon</span><span class="badge sun">🥈 2nd place</span></div>
+          <h3>Neuromedix</h3>
+          <p>A neuroscience hackathon project that placed second.</p>
+          <p class="mine"><i class="todo">What it does and what you built, in one or two lines.</i></p>
+          <div class="stack"><span class="badge">Hackathon</span><span class="badge">Health tech</span></div>
+        </article>
+
+        <article class="project">
+          <div class="kicker"><span class="label">Website · Nonprofit</span><span class="badge">Live</span></div>
+          <h3>Black Business Ventures Association</h3>
+          <p>The website for BBVA, built in Webflow so the team can update it themselves.</p>
+          <div class="links"><a href="#" class="todo">Visit site ↗</a></div>
+          <div class="stack"><span class="badge">Webflow</span><span class="badge">UX</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="about wrap" id="about">
+      <div class="sect-head"><h2>About</h2><span class="label">Nigerian-born, Calgary-based</span></div>
+      <div class="about-grid">
+        <div class="about-copy">
+          <p class="big">My background spans frontend development, UX design and talent recruiting, so I think about the person on the other side of the screen before I write a line of code.</p>
+          <p>I like building things people choose to open again: game mechanics, streaks and rewards, and dashboards that answer a question in one look. I've shipped gamification features in React Native, set up CI/CD with GitHub Actions, and worked in Agile teams on Jira.</p>
+          <p>Outside of client work I co-founded Curator Kollective, an event strategy and management company in Calgary. I speak English and Yorùbá, and conversational French.</p>
+          <div class="skills">
+            <div><span class="label">Build</span><div class="row"><span class="chip">React</span><span class="chip">React Native</span><span class="chip">TypeScript</span><span class="chip">JavaScript</span><span class="chip">Vite</span><span class="chip">Tailwind</span><span class="chip">Canvas</span></div></div>
+            <div><span class="label">Design</span><div class="row"><span class="chip">UX design</span><span class="chip">Prototyping</span><span class="chip">Webflow</span></div></div>
+            <div><span class="label">Ship</span><div class="row"><span class="chip">Firebase</span><span class="chip">GitHub Actions</span><span class="chip">Testing</span><span class="chip">AI orchestration</span><span class="chip">Jira / Agile</span></div></div>
+          </div>
+        </div>
+        <div>
+          <span class="label">Where I work</span>
+          <ul class="roles">
+            <li><b>Software Developer · MyAreaa</b><em>Full-time</em><span>Technical consulting: AI orchestration and finance-data dashboards.</span></li>
+            <li><b>Developer · PathsToPlace</b><em>Contract</em><span class="todo">One line on what you build there.</span></li>
+            <li><b>Co-founder · Curator Kollective</b><em>Calgary</em><span>Event strategy and management company.</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact wrap" id="contact">
+      <div class="contact-card">
+        <span class="label">Contact</span>
+        <h2>Let's build something people come back to.</h2>
+        <div class="contact-list">
+          <a href="mailto:you@example.com" class="todo">your@email.com</a>
+          <a href="#" class="todo" target="_blank" rel="noopener">LinkedIn ↗</a>
+          <a href="https://github.com/Fayo08" target="_blank" rel="noopener">GitHub ↗</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap"><span>© 2026 Favour Oyende</span><span>Built by hand with HTML and CSS</span></div>
+  </footer>
+</body>
+</html>
