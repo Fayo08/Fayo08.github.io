@@ -23,7 +23,7 @@
       slug: 'myareaa', name: 'MyAreaa', year: '2026', kind: 'Full-stack · community fintech',
       img: 'media/myareaa.webp', tags: ['Full-stack', 'Fintech', 'Community'],
       about: 'MyAreaa is about financial well-being. It is a community-focused app that provides financial services for users: they can donate, save and contribute money towards a shared goal.',
-      did: [], links: [], todo: 'add the link to MyAreaa',
+      did: [], links: [['live', 'https://www.myareaa.com/']],
     },
     {
       slug: 'talent-trace', name: 'TalentTrace', year: '2025', kind: 'Snapshot for Communiti · MakeItMVP',
