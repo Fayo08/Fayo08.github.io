@@ -1,6 +1,6 @@
 # oyende-favour
 
-Portfolio of Oyende Favour (Favour Oyende), full-stack developer in Calgary.
+Oyende Favour (Favour Oyende), full-stack developer in Calgary.
 
 Plain HTML, CSS and JavaScript, no build step. GitHub Pages serves `index.html` from the root of `main`.
 
